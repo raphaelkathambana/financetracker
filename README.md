@@ -12,7 +12,7 @@ The Personal Finance Tracker is a Java application designed to empower individua
 ## Project Structure
 - `src/`: Contains the source code of the Personal Finance Tracker.
 - `docs/`: Includes user documentation and guides.
-- `database/`: Stores the database schema and migration scripts.
+- `db/`: Stores the database schema and migration scripts.
 
 > Yoo, remember to apply these: GUI, JDBC, Exception Handling and one more (Threads or Gaming and Animation, or maybe JNI
 ¯\\_(ツ)_/¯ )
@@ -22,6 +22,9 @@ Contributions are welcome! If you have any ideas, suggestions, or bug reports, p
 
 ## License
 This project is licensed under the MIT License.
+
+## Setup
+To get Started, check out [SETUP.md](SETUP.md)
 
 ## Acknowledgments
 We would like to express our gratitude to [list individuals or organizations] for their contributions and support in the development of the Personal Finance Tracker.
