@@ -3,12 +3,17 @@ package util;
 public class Category {
     private String name;
     private String description;
-    private Category parentCategory;
+    private parentCategory parentCategory;
 
-    public Category(String name, String description, Category parentCategory) {
+    public Category(String name, String description, parentCategory parentCategory) {
         this.name = name;
         this.description = description;
         this.parentCategory = parentCategory;
+    }
+
+    public Category(String name, String description) {
+        this.name = name;
+        this.description = description;
     }
 
     public String getName() {
@@ -27,11 +32,12 @@ public class Category {
         this.description = description;
     }
 
-    public Category getParentCategory() {
+    public parentCategory getParentCategory() {
         return parentCategory;
     }
 
-    public void setParentCategory(Category parentCategory) {
+    public void setParentCategory(parentCategory parentCategory) {
         this.parentCategory = parentCategory;
     }
+
 }
