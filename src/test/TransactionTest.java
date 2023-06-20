@@ -10,7 +10,7 @@ import util.parentCategory;
 
 public class TransactionTest {
     @Test
-    public void testDisplayTransaction() {
+    public void testDateAndString() {
         String dateString = "2020-10-17";
         var t = new Transaction("", dateString, 20, new Category("", "", parentCategory.INCOME.getCategory()));
         assertEquals(t.getDate().toString(), dateString);
