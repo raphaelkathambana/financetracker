@@ -2,8 +2,8 @@ package util;
 
 public enum parentCategory {
 
-    INCOME(new Category("Income", "All sources of income", null)),
-    EXPENSE(new Category("Expenses", "All types of expenses", null));
+    INCOME(new Category("Income", "All sources of Income", null)),
+    EXPENSE(new Category("Expenses", "All types of Expenses", null));
 
     private final Category category;
 
