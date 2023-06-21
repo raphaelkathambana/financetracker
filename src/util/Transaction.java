@@ -16,8 +16,7 @@ public class Transaction { // Declare the Transaction class
     }
 
     public void displayInfo() { // Declare displayInfo method
-        System.out.println("Type: " + this.type + ", Date: " + this.date + ", Amount: " + this.amount + ", Category: "
-                + this.category); // Print details of transaction
+        System.out.println("Type: " + this.type + ", Date: " + this.date + ", Amount: " + this.amount + ", Category: " + this.category); // Print details of transaction
     }
 
     public java.sql.Date getSqlDate() {
