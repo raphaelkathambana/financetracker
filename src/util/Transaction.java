@@ -1,6 +1,8 @@
 package util;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Transaction { // Declare the Transaction class
     private String type; // Declare Type variable
@@ -15,6 +17,17 @@ public class Transaction { // Declare the Transaction class
         this.category = category;
     }
 
+    public List<Transaction> getTransactionByCategory(List<Transaction> transactions, Category category) {
+        // iterate over transactions and return only the transactions of the category
+        List<Transaction> result = new ArrayList<>();
+        for (Transaction transaction : transactions) {
+            if (transaction.getCategory().equals(category)) {
+                result.add(transaction);
+            }
+        }
+        return result;
+    }
+
     public void displayInfo() { // Declare displayInfo method
         System.out.println("Type: " + this.type + ", Date: " + this.date + ", Amount: " + this.amount + ", Category: " + this.category); // Print details of transaction
     }
@@ -22,8 +35,25 @@ public class Transaction { // Declare the Transaction class
     public java.sql.Date getSqlDate() {
         return java.sql.Date.valueOf(this.date);
     }
+
     public void saveToDB() { // Declare saveToDB method
-        // code to save to mysql database // Function body
+        // code to save to mysql database
+    }
+
+    @Override
+    public boolean equals(Object o) {
+
+        Transaction other = null;
+        if (o instanceof Transaction) {
+            other = (Transaction) o;
+        } else {
+            return false;
+        }
+        return this.type.equals(other.type) && this.date.equals(other.date) && this.amount == other.amount && this.category.equals(other.category);
+    }
+
+    public int hashCode() {
+        return this.type.hashCode() + this.date.hashCode() + (int) this.amount + this.category.hashCode();
     }
 
     public String getType() {
