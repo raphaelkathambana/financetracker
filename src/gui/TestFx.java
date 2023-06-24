@@ -4,27 +4,25 @@ import javax.swing.*;
 import java.awt.*;
 
 public class TestFx {
-    private JFrame frame;
-    private JMenuBar menuBar;
-    private JMenuItem newTransactionMenuItem;
-    private JTextField amountTextField;
-    private JTextField descriptionTextField;
-    private JComboBox<String> categoryComboBox;
-    private JRadioButton incomeRadioButton;
-    private JRadioButton expenseRadioButton;
-    private JButton submitButton;
-    private JTable transactionTable;
-    private JComboBox<String> reportTypeComboBox;
-    private JSpinner fromDateSpinner;
-    private JSpinner toDateSpinner;
-    private JButton generateReportButton;
-    private JPanel chartPanel;
-
     public TestFx() {
         createAndShowGUI();
     }
 
     private void createAndShowGUI() {
+        JTextField amountTextField;
+        JTextField descriptionTextField;
+        JComboBox<String> categoryComboBox;
+        JRadioButton incomeRadioButton;
+        JRadioButton expenseRadioButton;
+        JButton submitButton;
+        JTable transactionTable;
+        JComboBox<String> reportTypeComboBox;
+        JSpinner fromDateSpinner;
+        JSpinner toDateSpinner;
+        JButton generateReportButton;
+        JMenuItem newTransactionMenuItem;
+        JMenuBar menuBar;
+        JFrame frame;
         // Create the main frame
         frame = new JFrame("Personal Finance Tracker");
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -71,7 +69,7 @@ public class TestFx {
         fromDateSpinner = new JSpinner();
         toDateSpinner = new JSpinner();
         generateReportButton = new JButton("Generate Report");
-        chartPanel = new JPanel();
+        new JPanel();
         reportsPanel.add(new JLabel("Report Type:"));
         reportsPanel.add(reportTypeComboBox);
         reportsPanel.add(new JLabel("From Date:"));
