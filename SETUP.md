@@ -9,7 +9,7 @@
 > db.properties
 > ```properties
 >driverClassName = com.mysql.cj.jdbc.Driver
->jdbc:mysql://localhost:3306/financetracker
+>jdbc:mysql://localhost:3306/finance_tracker
 >username = your_username_here
 >password = your_password_here
 >```
