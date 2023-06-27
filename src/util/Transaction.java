@@ -5,13 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Transaction { // Declare the Transaction class
-    private String type; // Declare Type variable
     private Category category; // Declare category variable
     private LocalDate date; // Declare date variable
     private double amount; // Declare amount variable
 
-    public Transaction(String type, String dateString, double amount, Category category) {
-        this.type = type;
+    public Transaction(String dateString, double amount, Category category) {
         this.date = LocalDate.parse(dateString);
         this.amount = amount;
         this.category = category;
@@ -29,7 +27,7 @@ public class Transaction { // Declare the Transaction class
     }
 
     public void displayInfo() { // Declare displayInfo method
-        System.out.println("Type: " + this.type + ", Date: " + this.date + ", Amount: " + this.amount + ", Category: " + this.category); // Print details of transaction
+        System.out.println("Date: " + this.date + ", Amount: " + this.amount + ", Category: " + this.category); // Print details of transaction
     }
 
     public java.sql.Date getSqlDate() {
@@ -49,19 +47,11 @@ public class Transaction { // Declare the Transaction class
         } else {
             return false;
         }
-        return this.type.equals(other.type) && this.date.equals(other.date) && this.amount == other.amount && this.category.equals(other.category);
+        return this.date.equals(other.date) && this.amount == other.amount && this.category.equals(other.category);
     }
 
     public int hashCode() {
-        return this.type.hashCode() + this.date.hashCode() + (int) this.amount + this.category.hashCode();
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
+        return this.date.hashCode() + (int) this.amount + this.category.hashCode();
     }
 
     public LocalDate getDate() {
