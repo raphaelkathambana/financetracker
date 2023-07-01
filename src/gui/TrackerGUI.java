@@ -1,279 +1,313 @@
 package gui;
 
 import javax.swing.*;
+
+import util.User;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 
 public class TrackerGUI extends JFrame {
-    private JPanel currentPanel;
+    // Constants
+    private static final String USERNAME = "Username";
+    private static final String PASSWORD = "Password";
+    private static final String CONFIRM_PASSWORD = "Confirm Password";
+    private static final String NAME = "Name";
+    private static final String EMAIL = "Email";
+    private static final String CLEAR = "Clear";
+    private static final String GENDER = "Gender";
+    private static final String SUBMIT = "Submit";
+    private static final String SAVE_CHANGES = "Save Changes";
+    private static final String EDIT_PROFILE = "Edit Profile";
+    private static final String YES = "Yes";
+    private static final String NO = "No";
+
+    private JPanel contentPane;
+    private LoginPanel loginPanel;
+    private RegistrationPanel registrationPanel;
+    private ProfilePanel profilePanel;
 
     public TrackerGUI() {
         setTitle("Personal Finance Tracker");
-        setSize(400, 300);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setLayout(new BorderLayout());
+        setSize(600, 500);
+        setLocationRelativeTo(null);
 
-        showLoginPage();
+        contentPane = new JPanel(new CardLayout());
+
+        loginPanel = new LoginPanel();
+        registrationPanel = new RegistrationPanel();
+        profilePanel = new ProfilePanel();
+
+        contentPane.add(loginPanel, "login");
+        contentPane.add(registrationPanel, "registration");
+        contentPane.add(profilePanel, "profile");
+
+        add(contentPane);
+        setVisible(true);
     }
 
-    void showLoginPage() {
-        getContentPane().removeAll();
-        currentPanel = new LoginPanel();
-        add(currentPanel, BorderLayout.CENTER);
-        revalidate();
-        repaint();
+    public void switchToPanel(JPanel panel) {
+        contentPane.removeAll();
+        contentPane.add(panel, BorderLayout.CENTER);
+        contentPane.revalidate();
+        contentPane.repaint();
     }
 
-    void showRegistrationPage() {
-        getContentPane().removeAll();
-        currentPanel = new RegistrationPanel();
-        add(currentPanel, BorderLayout.CENTER);
-        revalidate();
-        repaint();
+    public void showProfilePage() {
+        switchToPanel(profilePanel);
     }
 
-    void showProfilePage() {
-        getContentPane().removeAll();
-        currentPanel = new ProfilePanel();
-        add(currentPanel, BorderLayout.CENTER);
-        revalidate();
-        repaint();
+    public void showRegistrationPage() {
+        switchToPanel(registrationPanel);
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new TrackerGUI().setVisible(true));
-    }
-}
+    private class LoginPanel extends JPanel {
+        private JTextField usernameField;
+        private JPasswordField passwordField;
+        private JButton loginButton;
+        private JButton forgotPasswordButton;
 
-class LoginPanel extends JPanel {
-    private static final String USERNAME = "Username:";
-    private static final String FORGOT_PASSWORD = "FORGOT Password:";
-    private static final String SUBMIT = "Submit";
-    private static final String PASSWORD = "Password:";
+        public LoginPanel() {
+            setLayout(new GridLayout(3, 2));
 
-    private JTextField usernameField;
-    private JPasswordField passwordField;
-    private JButton submitButton;
-    private JButton forgotPasswordButton;
+            JLabel usernameLabel = new JLabel(USERNAME);
+            JLabel passwordLabel = new JLabel(PASSWORD);
+            usernameField = new JTextField();
+            passwordField = new JPasswordField();
+            loginButton = new JButton("Login");
+            forgotPasswordButton = new JButton("Forgot Password");
 
-    public LoginPanel() {
-        setLayout(new GridLayout(4, 2));
+            add(usernameLabel);
+            add(usernameField);
+            add(passwordLabel);
+            add(passwordField);
+            add(loginButton);
+            add(forgotPasswordButton);
 
-        JLabel usernameLabel = new JLabel(USERNAME);
-        usernameField = new JTextField();
-        JLabel passwordLabel = new JLabel(PASSWORD);
-        passwordField = new JPasswordField();
-        submitButton = new JButton(SUBMIT);
-        forgotPasswordButton = new JButton(FORGOT_PASSWORD);
-
-        forgotPasswordButton.setContentAreaFilled(false);
-        forgotPasswordButton.setForeground(Color.BLUE);
-
-        add(usernameLabel);
-        add(usernameField);
-        add(passwordLabel);
-        add(passwordField);
-        add(new JLabel());
-        add(submitButton);
-        add(new JLabel());
-        add(forgotPasswordButton);
-
-        // ActionListener for the submit button
-        submitButton.addActionListener(this::actionPerformed);
-
-        // ActionListener for the forgot password button
-        forgotPasswordButton.addActionListener(this::actionPerformed);
-    }
-
-    public void actionPerformed(ActionEvent e) {
-        // forgotPasswordButton Clicked
-        if (e.getSource() == forgotPasswordButton) {
-            // Handle the forgot password functionality here
+            // Action listeners
+            loginButton.addActionListener(this::actionPerformed);
+            forgotPasswordButton.addActionListener(this::actionPerformed);
         }
-        // submitButton Clicked
-        if (e.getSource() == submitButton) {
-            // Handle the submit functionality here
-            String username = usernameField.getText();
-            String password = new String(passwordField.getPassword());
 
-            // Authenticate the user
-            if (authenticateUser(username, password)) {
-                // Successful authentication, perform desired action
-                // For example, switch to the profile page
-                var trackerGUI = new TrackerGUI();
-                trackerGUI.showProfilePage();
-            } else {
-                // Invalid credentials, show an error message
-                JOptionPane.showMessageDialog(LoginPanel.this, "Invalid username or password", "Error",
-                        JOptionPane.ERROR_MESSAGE);
+        private boolean authenticateUser(String username, String password) {
+            // Authentication logic
+            // ...
+            return username.equals("raphael") && password.equals("12345"); // Replace with your authentication implementation
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            if (e.getSource() == forgotPasswordButton) {
+                // Open the forgot password panel
+                // Implement the logic to reset the password and handle password recovery
+                // After resetting the password, switch back to the login panel
+            }
+            if (e.getSource() == loginButton) {
+                // Authenticate the user
+                String username = usernameField.getText();
+                String password = new String(passwordField.getPassword());
+
+                // Perform authentication logic here
+
+                if (authenticateUser(username, password)) {
+                    JOptionPane.showMessageDialog(LoginPanel.this, "Welcome " + username, "Login Success",
+                            JOptionPane.INFORMATION_MESSAGE);
+
+                // If authentication is successful, switch to the profile panel
+                CardLayout cardLayout = (CardLayout) contentPane.getLayout();
+                cardLayout.show(contentPane, "profile");
+                } else {
+                    JOptionPane.showMessageDialog(LoginPanel.this, "Invalid username or password", "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                }
             }
         }
     }
 
-    private boolean authenticateUser(String username, String password) {
-        // Implement your authentication logic here
-        // This could involve querying a database or checking against stored user
-        // credentials
+    private class RegistrationPanel extends JPanel {
+        private JTextField nameField;
+        private JTextField emailField;
+        private JTextField usernameField;
+        private JPasswordField passwordField;
+        private JPasswordField confirmPasswordField;
+        private JComboBox<String> genderComboBox;
+        private JButton submitButton;
+        private JButton clearButton;
 
-        // For demonstration purposes, let's assume there is a predefined username and
-        // password
-        String validUsername = "admin";
-        String validPassword = "password";
+        public RegistrationPanel() {
+            setLayout(new GridLayout(7, 2));
 
-        return username.equals(validUsername) && password.equals(validPassword);
-    }
-}
+            JLabel nameLabel = new JLabel(NAME);
+            JLabel emailLabel = new JLabel(EMAIL);
+            JLabel usernameLabel = new JLabel(USERNAME);
+            JLabel passwordLabel = new JLabel(PASSWORD);
+            JLabel confirmPasswordLabel = new JLabel(CONFIRM_PASSWORD);
+            JLabel genderLabel = new JLabel(GENDER);
+            nameField = new JTextField();
+            emailField = new JTextField();
+            usernameField = new JTextField();
+            passwordField = new JPasswordField();
+            confirmPasswordField = new JPasswordField();
+            genderComboBox = new JComboBox<>(new String[] { "Male", "Female", "I Identify as" });
+            submitButton = new JButton(SUBMIT);
+            clearButton = new JButton(CLEAR);
 
-class RegistrationPanel extends JPanel {
-    private JTextField nameField;
-    private JTextField emailField;
-    private JTextField usernameField;
-    private JPasswordField passwordField;
-    private JPasswordField confirmPasswordField;
-    private JTextField genderField;
-    private JButton submitButton;
-    private JButton clearButton;
+            add(nameLabel);
+            add(nameField);
+            add(emailLabel);
+            add(emailField);
+            add(usernameLabel);
+            add(usernameField);
+            add(passwordLabel);
+            add(passwordField);
+            add(confirmPasswordLabel);
+            add(confirmPasswordField);
+            add(genderLabel);
+            add(genderComboBox);
+            add(submitButton);
+            add(clearButton);
 
-    private static final String USERNAME = "Username:";
-    private static final String PASSWORD = "Password:";
-    private static final String CONFIRM_PASSWORD = "Confirm Password:";
-    private static final String NAME = "Name:";
-    private static final String EMAIL = "Email:";
-    private static final String SUBMIT = "Submit";
-    private static final String CLEAR = "Clear";
-    private static final String GENDER = "Gender: ";
-
-    public RegistrationPanel() {
-        setLayout(new GridLayout(6, 2));
-
-        JLabel nameLabel = new JLabel(NAME);
-        nameField = new JTextField();
-        JLabel emailLabel = new JLabel(EMAIL);
-        emailField = new JTextField();
-        JLabel usernameLabel = new JLabel(USERNAME);
-        usernameField = new JTextField();
-        JLabel passwordLabel = new JLabel(PASSWORD);
-        passwordField = new JPasswordField();
-        JLabel confirmPasswordLabel = new JLabel(CONFIRM_PASSWORD);
-        confirmPasswordField = new JPasswordField();
-        JLabel genderLabel = new JLabel(GENDER);
-        genderField = new JTextField();
-        submitButton = new JButton(SUBMIT);
-        clearButton = new JButton(CLEAR);
-
-        submitButton.addActionListener(this::actionPerformed);
-
-        clearButton.addActionListener(this::actionPerformed);
-
-        add(nameLabel);
-        add(nameField);
-        add(emailLabel);
-        add(emailField);
-        add(usernameLabel);
-        add(usernameField);
-        add(passwordLabel);
-        add(passwordField);
-        add(confirmPasswordLabel);
-        add(confirmPasswordField);
-        add(genderLabel);
-        add(genderField);
-        add(submitButton);
-        add(clearButton);
-    }
-
-    public void actionPerformed(ActionEvent e) {
-        if (e.getSource().equals(submitButton)) {
-            // Handle the registration form submission here
+            // Action listeners
+            submitButton.addActionListener(this::actionPerformed);
+            clearButton.addActionListener(this::actionPerformed);
         }
-        if (e.getSource().equals(clearButton)) {
-            // Clear all form fields
-            clearRegistrationForm();
+
+        public void actionPerformed(ActionEvent e) {
+            //clearButton Clicked
+            if (e.getSource() == clearButton) {
+                // Clear all fields
+                nameField.setText("");
+                emailField.setText("");
+                usernameField.setText("");
+                passwordField.setText("");
+                confirmPasswordField.setText("");
+                genderComboBox.setSelectedIndex(0);
+            }
+
+            //submitButton Clicked
+            if (e.getSource() == submitButton) {
+                // Perform registration logic here
+                // Validate the form inputs and save user data to the database
+
+                // If registration is successful, switch to the login panel
+                CardLayout cardLayout = (CardLayout) contentPane.getLayout();
+                cardLayout.show(contentPane, "login");
+            }
         }
     }
+    private class ProfilePanel extends JPanel {
+        private JTextField nameField;
+        private JTextField emailField;
+        private JTextField usernameField;
+        private JTextField genderField;
+        private JButton editProfileButton;
+        private JButton switchToLoginButton;
+        private JButton switchToRegistrationButton;
+        private JButton clearButton;
+        private User currentUser;
 
-    private void clearRegistrationForm() {
-        nameField.setText("");
-        emailField.setText("");
-        usernameField.setText("");
-        passwordField.setText("");
-        confirmPasswordField.setText("");
-        genderField.setText("");
-    }
-}
+        public ProfilePanel() {
+            setLayout(new GridLayout(6, 2));
 
-class ProfilePanel extends JPanel {
-    private JTextField nameField;
-    private JTextField emailField;
-    private JTextField usernameField;
-    private JPasswordField passwordField;
-    private JPasswordField confirmPasswordField;
-    private JTextField genderField;
-    private JButton clearButton;
-    private JButton submitButton;
+            JLabel nameLabel = new JLabel(NAME);
+            JLabel emailLabel = new JLabel(EMAIL);
+            JLabel usernameLabel = new JLabel(USERNAME);
+            JLabel genderLabel = new JLabel(GENDER);
+            nameField = new JTextField();
+            emailField = new JTextField();
+            usernameField = new JTextField();
+            genderField = new JTextField();
+            editProfileButton = new JButton(EDIT_PROFILE);
+            clearButton = new JButton(CLEAR);
+            switchToLoginButton = new JButton("Switch to Login");
+            switchToRegistrationButton = new JButton("Switch to Registration");
 
-    private static final String USERNAME = "Username:";
-    private static final String PASSWORD = "Password:";
-    private static final String CONFIRM_PASSWORD = "Confirm Password:";
-    private static final String NAME = "Name:";
-    private static final String EMAIL = "Email:";
-    private static final String SUBMIT = "Submit";
-    private static final String CLEAR = "Clear";
-    private static final String GENDER = "Gender: ";
+            // Make fields non-editable by default
+            nameField.setEditable(false);
+            emailField.setEditable(false);
+            usernameField.setEditable(false);
+            genderField.setEditable(false);
 
-    public ProfilePanel() {
-        setLayout(new GridLayout(7, 2));
+            add(nameLabel);
+            add(nameField);
+            add(emailLabel);
+            add(emailField);
+            add(usernameLabel);
+            add(usernameField);
+            add(genderLabel);
+            add(genderField);
+            add(editProfileButton);
+            add(clearButton);
+            add(switchToLoginButton);
+            add(switchToRegistrationButton);
 
-        JLabel nameLabel = new JLabel(NAME);
-        nameField = new JTextField();
-        JLabel emailLabel = new JLabel(EMAIL);
-        emailField = new JTextField();
-        JLabel usernameLabel = new JLabel(USERNAME);
-        usernameField = new JTextField();
-        JLabel passwordLabel = new JLabel(PASSWORD);
-        passwordField = new JPasswordField();
-        JLabel confirmPasswordLabel = new JLabel(CONFIRM_PASSWORD);
-        confirmPasswordField = new JPasswordField();
-        JLabel genderLabel = new JLabel(GENDER);
-        genderField = new JTextField();
-        clearButton = new JButton(CLEAR);
-        submitButton = new JButton(SUBMIT);
-
-        submitButton.addActionListener(this::actionPerformed);
-
-        clearButton.addActionListener(this::actionPerformed);
-
-        add(nameLabel);
-        add(nameField);
-        add(emailLabel);
-        add(emailField);
-        add(usernameLabel);
-        add(usernameField);
-        add(passwordLabel);
-        add(passwordField);
-        add(confirmPasswordLabel);
-        add(confirmPasswordField);
-        add(genderLabel);
-        add(genderField);
-        add(submitButton);
-        add(clearButton);
-    }
-
-    private void clearProfileForm() {
-        nameField.setText("");
-        emailField.setText("");
-        usernameField.setText("");
-        passwordField.setText("");
-        confirmPasswordField.setText("");
-        genderField.setText("");
-    }
-
-    public void actionPerformed(ActionEvent e) {
-        if (e.getSource().equals(submitButton)) {
-            // Handle the profile form submission here
+            // Action listeners
+            editProfileButton.addActionListener(this::actionPerformed);
+            switchToLoginButton.addActionListener(this::actionPerformed);
+            switchToRegistrationButton.addActionListener(this::actionPerformed);
+            clearButton.addActionListener(this::actionPerformed);
         }
-        if (e.getSource().equals(clearButton)) {
-            // Clear all form fields
-            clearProfileForm();
+
+        public void actionPerformed(ActionEvent e) {
+            if (e.getSource() == switchToLoginButton) {
+                switchToPanel(loginPanel);
+            }
+            if (e.getSource() == switchToRegistrationButton) {
+                switchToPanel(registrationPanel);
+            }
+            if (e.getSource() == clearButton) {
+                nameField.setText("");
+                emailField.setText("");
+                usernameField.setText("");
+                genderField.setText("");
+            }
+            if (e.getSource() == editProfileButton) {
+                if (editProfileButton.getText().equals(EDIT_PROFILE)) {
+                    // Switch to editable mode
+                    nameField.setEditable(true);
+                    emailField.setEditable(true);
+                    usernameField.setEditable(true);
+                    genderField.setEditable(true);
+                    editProfileButton.setText(SAVE_CHANGES);
+                } else if (editProfileButton.getText().equals(SAVE_CHANGES)) {
+                    // Save changes to the database
+                    // Implement the logic to update the user's profile
+
+                    // Switch back to non-editable mode
+                    nameField.setEditable(false);
+                    emailField.setEditable(false);
+                    usernameField.setEditable(false);
+                    genderField.setEditable(false);
+                    editProfileButton.setText(EDIT_PROFILE);
+                }
+            }
+
         }
+
+        public void setUser(User user) {
+            this.currentUser = user;
+            updateFields();
+        }
+
+        private void updateFields() {
+            nameField.setText(currentUser.getName());
+            emailField.setText(currentUser.getEmail());
+            usernameField.setText(currentUser.getUsername());
+            genderField.setText(currentUser.getGender());
+        }
+
+        private void saveChanges() {
+            String newName = nameField.getText();
+            String newEmail = emailField.getText();
+            String newUsername = usernameField.getText();
+            String newGender = genderField.getText();
+
+            // Update the user's information in the database
+            // ...
+        }
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(TrackerGUI::new);
     }
 }
