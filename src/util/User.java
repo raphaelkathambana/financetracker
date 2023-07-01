@@ -1,10 +1,29 @@
 package util;
 
 import java.sql.*;
+import java.util.regex.Pattern;
 public class User {
     private String name;
     private String email;
     private String password;
+    private String username;
+    private String gender;
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
     public User(String name, String email, String password) {
         this.name = name;
@@ -75,4 +94,9 @@ public class User {
             System.out.println("Error occurred while retrieving expenses: " + e.getMessage());
         }
     }
+    public static boolean patternMatches(String emailAddress, String regexPattern) {
+    return Pattern.compile(regexPattern)
+      .matcher(emailAddress)
+      .matches();
+}
 }
