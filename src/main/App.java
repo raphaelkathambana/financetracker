@@ -1,6 +1,9 @@
 package main;
 
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Properties;
 
 import util.Category;
 import util.Report;
@@ -55,6 +58,13 @@ public class App {
         var report = new Report("Expense Summary", "2021-01-10", "2021-01-30", expenses);
 
         report.generateReport();
-        // report.exportReport("C:\\Users\\maya1\\Desktop\\JavaOOPClass\\oop2class\\financetracker\\src\\util");
+                Properties mySql = new Properties();
+        try (FileReader in = new FileReader("db.properties")) {
+            mySql.load(in);
+        } catch (IOException e) {
+            System.out.println("Error loading db.properties from classpath." + e);
+        }
+        String exportUrl = mySql.getProperty("export");
+        report.exportReport(exportUrl);
     }
 }
