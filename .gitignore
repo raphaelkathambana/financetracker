@@ -1,3 +1,6 @@
 .vscode
 lib
 *.properties
+alice
+*.class
+bin
