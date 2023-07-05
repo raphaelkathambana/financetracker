@@ -3,174 +3,227 @@ package gui;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
+import java.util.logging.Logger;
 
 public class Login extends JFrame {
-    private JTextField usernameField;
-    private JPasswordField passwordField;
-    private JPasswordField confirmPasswordField;
-    private JTextField nameField;
-    private JTextField emailField;
-    private JTextField genderField;
-
     private static final String USERNAME = "Username:";
     private static final String PASSWORD = "Password:";
-    private static final String CONFIRM_PASSWORD = "Confirm Password:";
-    private static final String NAME = "Name:";
-    private static final String EMAIL = "Email:";    
+    private static final String LOGIN_TEXT = "Login";
+    private static final String FORGOT_PASSWORD = "Forgot Password?";
+    private static final String SHOW_PASSWORD = "Show Password";
+    private static final String LOGIN_PAGE = "Login Page";
+    private JPanel contentPane;
+    private LoginPanel loginPanel;
 
     public Login() {
-        // Set up the main JFrame
-        setTitle("Personal Finance Tracker");
-        setSize(400, 300);
+        setTitle(LOGIN_TEXT);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setLayout(new BorderLayout());
+        setSize(600, 500);
+        setLocationRelativeTo(null);
 
-        // Create panels for login, registration, and profile
-        JPanel loginPanel = createLoginPanel();
-        JPanel registrationPanel = createRegistrationPanel();
-        JPanel profilePanel = createProfilePanel();
+        contentPane = new JPanel(new CardLayout());
+        loginPanel = new LoginPanel();
 
-        // Add panels to the main JFrame
-        add(loginPanel, BorderLayout.CENTER);
-        add(registrationPanel, BorderLayout.CENTER);
-        add(profilePanel, BorderLayout.CENTER);
+        contentPane.add(loginPanel, LOGIN_PAGE);
 
-        // Show the login panel by default
-        showLoginPanel();
-    }
-
-    private JPanel createLoginPanel() {
-        JPanel panel = new JPanel(new GridLayout(3, 2));
-
-        JLabel usernameLabel = new JLabel(USERNAME);
-        usernameField = new JTextField();
-        JLabel passwordLabel = new JLabel(PASSWORD);
-        passwordField = new JPasswordField();
-        JButton forgotPasswordButton = new JButton("Forgot Password");
-
-        // Configure the forgot password button
-        forgotPasswordButton.setContentAreaFilled(false);
-        forgotPasswordButton.setForeground(Color.BLUE);
-
-        panel.add(usernameLabel);
-        panel.add(usernameField);
-        panel.add(passwordLabel);
-        panel.add(passwordField);
-        panel.add(new JLabel()); // Empty label for spacing
-        panel.add(forgotPasswordButton);
-
-        return panel;
-    }
-
-    private JPanel createRegistrationPanel() {
-        JPanel panel = new JPanel(new GridLayout(6, 2));
-
-        JLabel nameLabel = new JLabel(NAME);
-        nameField = new JTextField();
-        JLabel emailLabel = new JLabel(EMAIL);
-        emailField = new JTextField();
-        JLabel usernameLabel = new JLabel(USERNAME);
-        usernameField = new JTextField();
-        JLabel passwordLabel = new JLabel(PASSWORD);
-        passwordField = new JPasswordField();
-        JLabel confirmPasswordLabel = new JLabel(CONFIRM_PASSWORD);
-        confirmPasswordField = new JPasswordField();
-        JLabel genderLabel = new JLabel("Gender:");
-        genderField = new JTextField();
-        JButton submitButton = new JButton("Submit");
-        JButton clearButton = new JButton("Clear");
-
-        // Configure the submit button
-        submitButton.addActionListener(this::submitRegistrationForm);
-
-        // Configure the clear button
-        clearButton.addActionListener(this::clearForm);
-
-        panel.add(nameLabel);
-        panel.add(nameField);
-        panel.add(emailLabel);
-        panel.add(emailField);
-        panel.add(usernameLabel);
-        panel.add(usernameField);
-        panel.add(passwordLabel);
-        panel.add(passwordField);
-        panel.add(confirmPasswordLabel);
-        panel.add(confirmPasswordField);
-        panel.add(genderLabel);
-        panel.add(genderField);
-        panel.add(submitButton);
-        panel.add(clearButton);
-
-        return panel;
-    }
-
-    private JPanel createProfilePanel() {
-        JPanel panel = new JPanel(new GridLayout(6, 2));
-
-        JLabel nameLabel = new JLabel(NAME);
-        nameField = new JTextField();
-        JLabel emailLabel = new JLabel(EMAIL);
-        emailField = new JTextField();
-        JLabel usernameLabel = new JLabel(USERNAME);
-        usernameField = new JTextField();
-        JLabel passwordLabel = new JLabel(PASSWORD);
-        passwordField = new JPasswordField();
-        JLabel confirmPasswordLabel = new JLabel(CONFIRM_PASSWORD);
-        confirmPasswordField = new JPasswordField();
-        JLabel genderLabel = new JLabel("Gender:");
-        genderField = new JTextField();
-        JButton submitButton = new JButton("Submit");
-        JButton clearButton = new JButton("Clear");
-
-        // Configure the submit button
-        submitButton.addActionListener(this::submitProfileForm);
-
-        // Configure the clear button
-        clearButton.addActionListener(this::clearForm);
-
-        panel.add(nameLabel);
-        panel.add(nameField);
-        panel.add(emailLabel);
-        panel.add(emailField);
-        panel.add(usernameLabel);
-        panel.add(usernameField);
-        panel.add(passwordLabel);
-        panel.add(passwordField);
-        panel.add(confirmPasswordLabel);
-        panel.add(confirmPasswordField);
-        panel.add(genderLabel);
-        panel.add(genderField);
-        panel.add(submitButton);
-        panel.add(clearButton);
-
-        return panel;
-    }
-
-    private void showLoginPanel() {
-        getContentPane().removeAll();
-        getContentPane().add(createLoginPanel(), BorderLayout.CENTER);
-        revalidate();
-        repaint();
-    }
-
-    private void submitRegistrationForm(ActionEvent e) {
-        // Perform registration form submission logic here
-    }
-
-    private void submitProfileForm(ActionEvent e) {
-        // Perform profile form submission logic here
-    }
-
-    private void clearForm(ActionEvent e) {
-        nameField.setText("");
-        emailField.setText("");
-        usernameField.setText("");
-        passwordField.setText("");
-        confirmPasswordField.setText("");
-        genderField.setText("");
+        add(contentPane);
+        setVisible(true);
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new Login().setVisible(true));
+        SwingUtilities.invokeLater(Login::new);
     }
+
+    private class LoginPanel extends JPanel implements FocusListener {
+        private JTextField usernameField;
+        private JPasswordField passwordField;
+        private JButton loginButton;
+        private JButton forgotPasswordButton;
+        private JCheckBox showPassword;
+
+        public LoginPanel() {
+            // initialize container properties
+            setLayout(null);
+
+            var lbTitle = new JLabel(LOGIN_PAGE);
+            lbTitle.setFont(new Font("Serif", Font.BOLD, 20));
+
+            JLabel usernameLabel = new JLabel(USERNAME);
+            usernameField = new JTextField(USERNAME);
+            usernameField.setForeground(Color.LIGHT_GRAY);
+            JLabel passwordLabel = new JLabel(PASSWORD);
+            passwordField = new JPasswordField();
+            showPassword = new javax.swing.JCheckBox(SHOW_PASSWORD);
+
+            var btnRegister = new JButton("Register");
+            loginButton = new JButton(LOGIN_TEXT);
+            forgotPasswordButton = new JButton(FORGOT_PASSWORD);
+
+            // deciding location for the components since we have no layout
+            lbTitle.setBounds(300, 110, 400, 30);
+            usernameLabel.setBounds(130, 160, 200, 30);
+            passwordLabel.setBounds(130, 210, 200, 30);
+            usernameField.setBounds(260, 160, 200, 30);
+            passwordField.setBounds(260, 210, 200, 30);
+            showPassword.setBounds(260, 250, 150, 15);
+            loginButton.setBounds(250, 275, 100, 30);
+            btnRegister.setBounds(370, 275, 100, 30);
+
+            // add to container
+            add(lbTitle);
+            add(usernameLabel);
+            add(usernameField);
+            add(passwordLabel);
+            add(passwordField);
+            add(showPassword);
+            add(loginButton);
+            add(btnRegister);
+            add(forgotPasswordButton);
+
+            // Action listeners
+            loginButton.addActionListener(this::actionPerformed);
+            forgotPasswordButton.addActionListener(this::actionPerformed);
+            btnRegister.addActionListener(this::actionPerformed);
+            showPassword.addActionListener(this::showPasswordActionPerformed);
+            usernameField.addFocusListener(this);
+            passwordField.addFocusListener(this);
+            addWindowListener(new java.awt.event.WindowAdapter() {
+                @Override
+                public void windowOpened(java.awt.event.WindowEvent evt) {
+                    usernameField.requestFocus();
+                }
+            });
+            passwordField.addKeyListener(new java.awt.event.KeyAdapter() {
+                @Override
+                public void keyPressed(java.awt.event.KeyEvent evt) {
+                    pfPasswordPressed(evt);
+                }
+            });
+        }
+
+        private boolean authenticateUser(String username, String password) {
+            // Authentication logic
+            // ...
+            return username.equals("raphael") && password.equals("12345"); // Replace with your authentication//
+                                                                           // implementation
+        }
+
+        protected void showPasswordActionPerformed(ActionEvent evt) {
+            if (showPassword.isSelected()) {
+                Logger.getLogger(Login.class.getName()).info("Show Password CheckBox is selected");
+                passwordField.setEchoChar((char) 0);
+                passwordField.setFocusable(false);
+            } else {
+                Logger.getLogger(Login.class.getName()).info("Show Password CheckBox is Unselected");
+                passwordField.setEchoChar('*');
+                passwordField.setFocusable(true);
+                passwordField.requestFocus();
+            }
+        }
+
+        private void pfPasswordPressed(java.awt.event.KeyEvent evt) {
+            if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+                Logger.getLogger(Login.class.getName()).info("Login Button Clicked");
+                // Authenticate the user
+                String username = usernameField.getText();
+                String password = new String(passwordField.getPassword());
+
+                // Perform authentication logic here
+
+                if (authenticateUser(username, password)) {
+                    JOptionPane.showMessageDialog(LoginPanel.this, "Welcome " + username, "Login Success",
+                            JOptionPane.INFORMATION_MESSAGE);
+
+                    // If authentication is successful, switch to the profile panel
+
+                } else {
+                    JOptionPane.showMessageDialog(LoginPanel.this, "Invalid username or password", "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            if (e.getSource() == forgotPasswordButton) {
+                // Open the forgot password panel
+                // Implement the logic to reset the password and handle password recovery
+                // After resetting the password, switch back to the login panel
+            }
+            if (e.getSource() == loginButton) {
+                // Authenticate the user
+                String username = usernameField.getText();
+                String password = new String(passwordField.getPassword());
+
+                // Perform authentication logic here
+
+                if (authenticateUser(username, password)) {
+                    JOptionPane.showMessageDialog(LoginPanel.this, "Welcome " + username, "Login Success",
+                            JOptionPane.INFORMATION_MESSAGE);
+
+                    // If authentication is successful, switch to the profile panel
+
+                } else {
+                    JOptionPane.showMessageDialog(LoginPanel.this, "Invalid username or password", "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }
+
+        @Override
+        public void focusGained(FocusEvent e) {
+            if (e.getSource() == passwordField) {
+                Logger.getLogger(Login.class.getName()).info("Focus Gained on Password");
+                passwordField.setEchoChar('*');
+                String word = String.valueOf(passwordField.getPassword());
+                if (word.equals(PASSWORD)) {
+                    passwordField.setForeground(Color.BLACK);
+                    passwordField.setText("");
+                }
+                if (word.length() <= 0 && word.equals(PASSWORD)) {
+                    passwordField.setText("");
+                }
+            }
+            if (e.getSource() == usernameField) {
+                Logger.getLogger(Login.class.getName()).info("Focus Gained on username");
+                String word = usernameField.getText();
+                if (word.equals(USERNAME)) {
+                    usernameField.setForeground(Color.BLACK);
+                    usernameField.setText("");
+                }
+                if (word.length() <= 0 && word.equals(USERNAME)) {
+                    usernameField.setText("");
+                }
+                String word2 = String.valueOf(passwordField.getPassword());
+                if (word2.length() <= 0) {
+                    passwordField.setForeground(Color.LIGHT_GRAY);
+                    passwordField.setText(PASSWORD);
+                    passwordField.setEchoChar((char) 0);
+                }
+            }
+        }
+
+        @Override
+        public void focusLost(FocusEvent e) {
+            if (e.getSource() == passwordField) {
+                Logger.getLogger(Login.class.getName()).info("Focus Lost On Password");
+                String word = String.valueOf(passwordField.getPassword());
+                if (word.length() <= 0) {
+                    passwordField.setForeground(Color.LIGHT_GRAY);
+                    passwordField.setText(PASSWORD);
+                    passwordField.setEchoChar((char) 0);
+                }
+            }
+            if (e.getSource() == usernameField) {
+                Logger.getLogger(Login.class.getName()).info("Focus Lost On Name");
+                if (usernameField.getText().length() <= 0) {
+                    usernameField.setForeground(Color.LIGHT_GRAY);
+                    usernameField.setText(USERNAME);
+                }
+            }
+        }
+    }
+
 }
