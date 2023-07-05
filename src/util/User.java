@@ -2,7 +2,18 @@ package util;
 
 import java.sql.*;
 import java.util.regex.Pattern;
+
 public class User {
+    private int id;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     private String name;
     private String email;
     private String password;
@@ -25,7 +36,8 @@ public class User {
         this.username = username;
     }
 
-    public User(String name, String email, String password) {
+    public User(int id, String name, String email, String password) {
+        this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
@@ -94,9 +106,10 @@ public class User {
             System.out.println("Error occurred while retrieving expenses: " + e.getMessage());
         }
     }
+
     public static boolean patternMatches(String emailAddress, String regexPattern) {
-    return Pattern.compile(regexPattern)
-      .matcher(emailAddress)
-      .matches();
-}
+        return Pattern.compile(regexPattern)
+                .matcher(emailAddress)
+                .matches();
+    }
 }
