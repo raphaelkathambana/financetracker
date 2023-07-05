@@ -46,9 +46,10 @@ DROP table IF EXISTS `user_info`;
 CREATE TABLE if NOT exists `user_info`(
     `userID` VARCHAR(255) NOT NULL,
     `username` VARCHAR(255) NOT NULL,
+    `Name` VARCHAR(255) NOT NULL,
     `email` VARCHAR(255) NOT NULL,
     `password` VARCHAR(255) NOT NULL,
-    `user_amount` BIGINT NOT NULL
+    `Gender` VARCHAR(255) NOT NULL
 );
 ALTER TABLE `user_info` ADD PRIMARY KEY(`userID`);
 
@@ -98,10 +99,10 @@ RENAME COLUMN categoryName TO name;
 
 
 INSERT INTO Category (categoryID, name, description, parent_category_id)
-VALUES ('C-001', 'Income', NULL, NULL);
+VALUES ('C-001', 'Income', 'All sources of income', NULL);
 
 INSERT INTO Category (categoryID, name, description, parent_category_id)
-VALUES ('C-002', 'Expenses', NULL, NULL);
+VALUES ('C-002', 'Expenses', 'All types of expenses', NULL);
 
 
 
