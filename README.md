@@ -26,6 +26,9 @@ This project is licensed under the MIT License.
 ## Setup
 To get Started, check out [SETUP.md](SETUP.md)
 
+## Pages
+To view the different Screens and roles, check out [GUIPLAN.md](GUIPLAN.md)
+
 ## Acknowledgments
 We would like to express our gratitude to [list individuals or organizations] for their contributions and support in the development of the Personal Finance Tracker.
 

@@ -1,37 +1,106 @@
 package util;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class Budget {
-    private Category category;
-    private double budgetAmount;
-    private double progress;
+    private String startDate;
+    private String endDate;
+    private double totalIncome;
+    private double totalExpenses;
+    private Map<Category, List<Double>> allocatedCategories;
 
-    public Budget(Category category, double budgetAmount, double progress) {
-        this.category = category;
-        this.budgetAmount = budgetAmount;
-        this.progress = progress;
+    public Budget(String startDate, String endDate) {
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.totalIncome = 0.0;
+        this.totalExpenses = 0.0;
+        this.allocatedCategories = new HashMap<>();
     }
 
-    public Category getCategory() {
-        return category;
+    public void setTotalIncome(double totalIncome) {
+        this.totalIncome = totalIncome;
     }
 
-    public void setCategory(Category category) {
-        this.category = category;
+    public void allocateCategoryBudget(Category category, double amount) {
+        List<Double> amountMap = new ArrayList<>();
+        amountMap.add(amount);
+        amountMap.add(0.0);
+        allocatedCategories.put(category, amountMap);
     }
 
-    public double getBudgetAmount() {
-        return budgetAmount;
+    public void trackExpense(Category category, double expenseAmount) {
+        totalExpenses += expenseAmount;
+
+        if (allocatedCategories.containsKey(category)) {
+            double allocatedAmount = allocatedCategories.get(category).get(0);
+            double remainingBudget = allocatedAmount - expenseAmount;
+
+            if (remainingBudget < 0) {
+                System.out.println("You have exceeded the budget for category: " + category);
+                // Generate an alert or notification for exceeding the budget
+            }
+
+            List<Double> amountMap = new ArrayList<>();
+            amountMap.add(remainingBudget);
+            amountMap.add(expenseAmount);
+
+            allocatedCategories.put(category, amountMap);
+        }
     }
 
-    public void setBudgetAmount(double budgetAmount) {
-        this.budgetAmount = budgetAmount;
+    public void generateBudgetReport() {
+        System.out.println("Budget Report:");
+        System.out.println("Start Date: " + startDate);
+        System.out.println("End Date: " + endDate);
+        System.out.println("Total Income: " + totalIncome);
+        System.out.println("Total Expenses: " + totalExpenses);
+
+        for (Map.Entry<Category, List<Double>> entry : allocatedCategories.entrySet()) {
+            Category category = entry.getKey();
+            List<Double> allocatedAmount = entry.getValue();
+
+            System.out.println("Category: " + category.getName());
+            System.out.println("Allocated Amount: " + (allocatedAmount.get(0) + allocatedAmount.get(1)));
+            System.out.println("Remaining Budget: " + allocatedAmount.get(0));
+        }
     }
 
-    public double getProgress() {
-        return progress;
+    public String getStartDate() {
+        return startDate;
     }
 
-    public void setProgress(double progress) {
-        this.progress = progress;
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    public String getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
+    }
+
+    public double getTotalIncome() {
+        return totalIncome;
+    }
+
+    public double getTotalExpenses() {
+        return totalExpenses;
+    }
+
+    public void setTotalExpenses(double totalExpenses) {
+        this.totalExpenses = totalExpenses;
+    }
+
+    public Map<Category, List<Double>> getAllocatedCategories() {
+        return allocatedCategories;
+    }
+
+    public void setAllocatedCategories(Map<Category, List<Double>> allocatedCategories) {
+        this.allocatedCategories = allocatedCategories;
     }
 }
