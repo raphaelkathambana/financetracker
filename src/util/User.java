@@ -112,4 +112,13 @@ public class User {
                 .matcher(emailAddress)
                 .matches();
     }
+
+    public User updateUser(User user) {
+        // TODO update fn
+        return user;
+    }
+
+    public void updateUser(String newName, String newEmail, String newUsername, String newGender) {
+        // TODO update query
+    }
 }
