@@ -158,7 +158,7 @@ public class User {
             ResultSet rs = stat.executeQuery();
 
             if (rs.next()) {
-                user = new User(rs.getInt("user_id"), rs.getString("name"), rs.getString("email"),
+                user = new User(rs.getInt("user_id"), rs.getString("username"), rs.getString("email"),
                         rs.getString("password"));
             }
         } catch (SQLException e) {
@@ -177,7 +177,7 @@ public class User {
             ResultSet rs = stat.executeQuery();
 
             if (rs.next()) {
-                user = new User(rs.getInt("user_id"), rs.getString("name"), rs.getString("email"),
+                user = new User(rs.getInt("user_id"), rs.getString("username"), rs.getString("email"),
                         rs.getString("password"));
             }
         } catch (SQLException e) {
