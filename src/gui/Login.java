@@ -46,6 +46,7 @@ public class Login extends JFrame {
         private JButton loginButton;
         private JButton forgotPasswordButton;
         private JCheckBox showPassword;
+        private JButton btnRegister;
         private transient User currentUser = null;
 
         public User getCurrentUser() {
@@ -70,7 +71,7 @@ public class Login extends JFrame {
             passwordField = new JPasswordField();
             showPassword = new javax.swing.JCheckBox(SHOW_PASSWORD);
 
-            var btnRegister = new JButton("Register");
+            btnRegister = new JButton("Register");
             loginButton = new JButton(LOGIN_TEXT);
             forgotPasswordButton = new JButton(FORGOT_PASSWORD);
 
@@ -139,23 +140,7 @@ public class Login extends JFrame {
         private void pfPasswordPressed(java.awt.event.KeyEvent evt) {
             if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
                 Logger.getLogger(Login.class.getName()).info("Login Button Clicked");
-                // Authenticate the user
-                String username = usernameField.getText();
-                String password = new String(passwordField.getPassword());
-
-                // Perform authentication logic here
-
-                if (authenticateUser(username, password)) {
-                    this.setCurrentUser(User.getUser(username, password));
-                    JOptionPane.showMessageDialog(LoginPanel.this, "Welcome " + username, "Login Success",
-                            JOptionPane.INFORMATION_MESSAGE);
-
-                    // If authentication is successful, switch to the profile panel
-
-                } else {
-                    JOptionPane.showMessageDialog(LoginPanel.this, "Invalid username or password", "Error",
-                            JOptionPane.ERROR_MESSAGE);
-                }
+                loginButtonClicked();
             }
         }
 
@@ -168,6 +153,14 @@ public class Login extends JFrame {
             if (e.getSource() == loginButton) {
                 loginButtonClicked();
             }
+
+            if (e.getSource() == btnRegister) {
+                registerButtonCLicked();
+            }
+        }
+
+        private void registerButtonCLicked() {
+            SwingUtilities.invokeLater(Registration::new);
         }
 
         public void loginButtonClicked() {
@@ -178,11 +171,12 @@ public class Login extends JFrame {
             // Perform authentication logic here
 
             if (authenticateUser(username, password)) {
-                JOptionPane.showMessageDialog(LoginPanel.this, "Welcome " + username, "Login Success", JOptionPane.INFORMATION_MESSAGE);
+                this.setCurrentUser(User.getUser(username, password));
+                JOptionPane.showMessageDialog(LoginPanel.this, "Welcome " + username, "Login Success",
+                        JOptionPane.INFORMATION_MESSAGE);
 
-                // If authentication is successful, switch to the profile frame
-                SwingUtilities.invokeLater(() -> new Profile(this.getCurrentUser()));
-
+                // If authentication is successful, switch to the profile panel
+                SwingUtilities.invokeLater(() -> new Profile(getCurrentUser()));
             } else {
                 JOptionPane.showMessageDialog(LoginPanel.this, "Invalid username or password", "Error", JOptionPane.ERROR_MESSAGE);
             }
@@ -241,5 +235,4 @@ public class Login extends JFrame {
             }
         }
     }
-
 }
