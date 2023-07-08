@@ -119,6 +119,74 @@ public class User {
     }
 
     public void updateUser(String newName, String newEmail, String newUsername, String newGender) {
-        // TODO update query
+        // update query
+        int userIdToUpdate = 0;
+        final String UPDATE_USER_QUERY = "UPDATE users SET name=?, email=?, username=?, gender=? where id=?;";
+        try (var statement = GetConnection.getConn().prepareStatement(UPDATE_USER_QUERY);) {
+            statement.setString(1, newName);
+            statement.setString(2, newGender);
+            statement.setString(3, newEmail);
+            statement.setString(4, newUsername);
+            statement.setInt(5, userIdToUpdate);
+            statement.executeUpdate();
+            System.out.println("User updated successfully.");
+        } catch (SQLException e) {
+            System.out.println("Error occurred while updating the user: " + e.getMessage());
+        }
+    }
+
+    public void deleteUser() {
+        // delete query
+        int userIdToDelete = 0;
+        final String DELETE_USER_QUERY = "DELETE FROM users WHERE id=?;";
+        try (var statement = GetConnection.getConn().prepareStatement(DELETE_USER_QUERY);) {
+            statement.setInt(1, userIdToDelete);
+            statement.executeUpdate();
+            System.out.println("User deleted successfully.");
+        } catch (SQLException e) {
+            System.out.println("Error occurred while deleting the user: " + e.getMessage());
+        }
+    }
+
+    public static User getUser(String username, String password) {
+        User user = null;
+        var query = "SELECT * FROM user_info WHERE username = ? and password = ?;";
+
+        try (var stat = GetConnection.getConn().prepareStatement(query);) {
+            stat.setString(1, username);
+            stat.setString(2, password);
+            ResultSet rs = stat.executeQuery();
+
+            if (rs.next()) {
+                user = new User(rs.getInt("user_id"), rs.getString("name"), rs.getString("email"),
+                        rs.getString("password"));
+            }
+        } catch (SQLException e) {
+            System.out.println("Error occurred while retrieving user: " + e.getMessage());
+        }
+        return user;
+    }
+
+    public static User authenticateUser(String username, String password) {
+        User user = null;
+        var query = "SELECT * FROM user_info WHERE username = ? and password = ?;";
+
+        try (var stat = GetConnection.getConn().prepareStatement(query);) {
+            stat.setString(1, username);
+            stat.setString(2, password);
+            ResultSet rs = stat.executeQuery();
+
+            if (rs.next()) {
+                user = new User(rs.getInt("user_id"), rs.getString("name"), rs.getString("email"),
+                        rs.getString("password"));
+            }
+        } catch (SQLException e) {
+            System.out.println("Error occurred: " + e.getMessage());
+        }
+        return user;
+    }
+
+    public static void addNewUser(String text, String text2, String text3, String text4, Object selectedItem) {
+        // TODO add new user
     }
 }

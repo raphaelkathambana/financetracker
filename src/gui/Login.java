@@ -1,6 +1,9 @@
 package gui;
 
 import javax.swing.*;
+
+import util.User;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
@@ -43,6 +46,15 @@ public class Login extends JFrame {
         private JButton loginButton;
         private JButton forgotPasswordButton;
         private JCheckBox showPassword;
+        private transient User currentUser = null;
+
+        public User getCurrentUser() {
+            return currentUser;
+        }
+
+        public void setCurrentUser(User currentUser) {
+            this.currentUser = currentUser;
+        }
 
         public LoginPanel() {
             // initialize container properties
@@ -106,9 +118,9 @@ public class Login extends JFrame {
 
         private boolean authenticateUser(String username, String password) {
             // Authentication logic
-            // ...
-            return username.equals("raphael") && password.equals("12345"); // Replace with your authentication//
-                                                                           // implementation
+            // return true if the user is authenticated, false otherwise
+            User.authenticateUser(username, password);
+            return currentUser != null;
         }
 
         protected void showPasswordActionPerformed(ActionEvent evt) {
@@ -134,6 +146,7 @@ public class Login extends JFrame {
                 // Perform authentication logic here
 
                 if (authenticateUser(username, password)) {
+                    this.setCurrentUser(User.getUser(username, password));
                     JOptionPane.showMessageDialog(LoginPanel.this, "Welcome " + username, "Login Success",
                             JOptionPane.INFORMATION_MESSAGE);
 
@@ -153,22 +166,25 @@ public class Login extends JFrame {
                 // After resetting the password, switch back to the login panel
             }
             if (e.getSource() == loginButton) {
-                // Authenticate the user
-                String username = usernameField.getText();
-                String password = new String(passwordField.getPassword());
+                loginButtonClicked();
+            }
+        }
 
-                // Perform authentication logic here
+        public void loginButtonClicked() {
+            // Authenticate the user
+            String username = usernameField.getText();
+            String password = new String(passwordField.getPassword());
 
-                if (authenticateUser(username, password)) {
-                    JOptionPane.showMessageDialog(LoginPanel.this, "Welcome " + username, "Login Success",
-                            JOptionPane.INFORMATION_MESSAGE);
+            // Perform authentication logic here
 
-                    // If authentication is successful, switch to the profile panel
+            if (authenticateUser(username, password)) {
+                JOptionPane.showMessageDialog(LoginPanel.this, "Welcome " + username, "Login Success", JOptionPane.INFORMATION_MESSAGE);
 
-                } else {
-                    JOptionPane.showMessageDialog(LoginPanel.this, "Invalid username or password", "Error",
-                            JOptionPane.ERROR_MESSAGE);
-                }
+                // If authentication is successful, switch to the profile frame
+                SwingUtilities.invokeLater(() -> new Profile(this.getCurrentUser()));
+
+            } else {
+                JOptionPane.showMessageDialog(LoginPanel.this, "Invalid username or password", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
 

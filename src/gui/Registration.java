@@ -1,6 +1,9 @@
 package gui;
 
 import javax.swing.*;
+
+import util.User;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 
@@ -110,11 +113,37 @@ public class Registration extends JFrame {
 
             // submitButton Clicked
             if (e.getSource() == submitButton) {
-                // TODO Perform registration logic here
+                // Perform registration logic here
                 // Validate the form inputs and save user data to the database
+                if (validateInput()) {
+                    // Save user data to the database
+                    User.addNewUser(nameField.getText(), emailField.getText(), usernameField.getText(), String.valueOf(passwordField.getPassword()), genderComboBox.getSelectedItem());
+                    // If registration is successful, switch to the login panel
+                    SwingUtilities.invokeLater(Login::new);
+                } else {
+                    // Show error message
+                    JOptionPane.showMessageDialog(this, "Invalid input", "Error", JOptionPane.ERROR_MESSAGE);
+                }
 
-                // If registration is successful, switch to the login panel
             }
+        }
+        public boolean validateInput() {
+            var regexPattern = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
+                    + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
+            String firstName = nameField.getText();
+            String email = emailField.getText();
+            String username = usernameField.getText();
+            String password = String.valueOf(passwordField.getPassword());
+            String confirmPassword = String.valueOf(confirmPasswordField.getPassword());
+            int selectedGenderIdx = genderComboBox.getSelectedIndex();
+            return !firstName.isEmpty() &&
+                    !email.isEmpty() &&
+                    User.patternMatches(email, regexPattern) &&
+                    !username.isEmpty() &&
+                    !password.isEmpty() &&
+                    !confirmPassword.isEmpty() &&
+                    password.equals(confirmPassword) &&
+                    selectedGenderIdx != 0;
         }
     }
 
