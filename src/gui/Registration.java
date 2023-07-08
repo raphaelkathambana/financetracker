@@ -135,15 +135,13 @@ public class Registration extends JFrame {
             String username = usernameField.getText();
             String password = String.valueOf(passwordField.getPassword());
             String confirmPassword = String.valueOf(confirmPasswordField.getPassword());
-            int selectedGenderIdx = genderComboBox.getSelectedIndex();
             return !firstName.isEmpty() &&
                     !email.isEmpty() &&
                     User.patternMatches(email, regexPattern) &&
                     !username.isEmpty() &&
                     !password.isEmpty() &&
                     !confirmPassword.isEmpty() &&
-                    password.equals(confirmPassword) &&
-                    selectedGenderIdx != 0;
+                    password.equals(confirmPassword);
         }
     }
 
