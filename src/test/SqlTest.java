@@ -1,12 +1,15 @@
 package test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import java.io.IOException;
 import java.util.Properties;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import util.GetConnection;
 
 public class SqlTest {
     private static String name;
@@ -19,5 +22,10 @@ public class SqlTest {
     @Test
     public void test() {
         assertEquals("root", name); 
+    }
+
+    @Test
+    public void testConnection() {
+        assertNull(GetConnection.getConn());
     }
 }
