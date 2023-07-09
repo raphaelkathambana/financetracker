@@ -14,7 +14,6 @@ public class User {
         this.id = id;
     }
 
-    private String name;
     private String email;
     private String password;
     private String username;
@@ -36,19 +35,11 @@ public class User {
         this.username = username;
     }
 
-    public User(int id, String name, String email, String password) {
+    public User(int id, String username, String email, String password) {
         this.id = id;
-        this.name = name;
+        this.username = username;
         this.email = email;
         this.password = password;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getEmail() {
@@ -121,7 +112,7 @@ public class User {
     public void updateUser(String newName, String newEmail, String newUsername, String newGender) {
         // update query
         int userIdToUpdate = 0;
-        final String UPDATE_USER_QUERY = "UPDATE users SET name=?, email=?, username=?, gender=? where id=?;";
+        final String UPDATE_USER_QUERY = "UPDATE user_info SET username=?, email=?, username=?, gender=? where userID=?;";
         try (var statement = GetConnection.getConn().prepareStatement(UPDATE_USER_QUERY);) {
             statement.setString(1, newName);
             statement.setString(2, newGender);
@@ -177,7 +168,7 @@ public class User {
             ResultSet rs = stat.executeQuery();
 
             if (rs.next()) {
-                user = new User(rs.getInt("user_id"), rs.getString("username"), rs.getString("email"),
+                user = new User(rs.getInt(1), rs.getString("username"), rs.getString("email"),
                         rs.getString("password"));
             }
         } catch (SQLException e) {
