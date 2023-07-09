@@ -120,7 +120,8 @@ public class Login extends JFrame {
         private boolean authenticateUser(String username, String password) {
             // Authentication logic
             // return true if the user is authenticated, false otherwise
-            User.authenticateUser(username, password);
+            
+            this.setCurrentUser(User.authenticateUser(username, password));
             return currentUser != null;
         }
 
@@ -171,7 +172,6 @@ public class Login extends JFrame {
             // Perform authentication logic here
 
             if (authenticateUser(username, password)) {
-                this.setCurrentUser(User.getUser(username, password));
                 JOptionPane.showMessageDialog(LoginPanel.this, "Welcome " + username, "Login Success",
                         JOptionPane.INFORMATION_MESSAGE);
 
