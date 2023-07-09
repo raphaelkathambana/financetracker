@@ -10,7 +10,7 @@ public class GetConnection {
     public static final Connection conn = connection();
 
     public static Connection getConn() {
-        return conn;
+        return connection();
     }
 
     GetConnection() {
