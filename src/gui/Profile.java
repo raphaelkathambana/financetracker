@@ -27,14 +27,14 @@ public class Profile extends JFrame {
         setLocationRelativeTo(null);
 
         contentPane = new JPanel(new CardLayout());
-        profilePanel = new ProfilePanel();
-        profilePanel.setCurrentUser(currentUser);
+        profilePanel = new ProfilePanel(currentUser);
 
         contentPane.add(profilePanel, PROFILE_PAGE);
 
         add(contentPane);
         setVisible(true);
     }
+
     public Profile() {
         setTitle("Personal Finance Tracker");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -133,9 +133,55 @@ public class Profile extends JFrame {
             clearButton.addActionListener(this::actionPerformed);
         }
 
+        public ProfilePanel(User currentUser) {
+            setLayout(new GridLayout(6, 2));
+
+            JLabel nameLabel = new JLabel(NAME);
+            JLabel emailLabel = new JLabel(EMAIL);
+            JLabel usernameLabel = new JLabel(USERNAME);
+            JLabel genderLabel = new JLabel(GENDER);
+            nameField = new JTextField();
+            emailField = new JTextField();
+            usernameField = new JTextField();
+            genderField = new JTextField();
+            editProfileButton = new JButton(EDIT_PROFILE);
+            clearButton = new JButton(CLEAR);
+            switchToLoginButton = new JButton("Switch to Login");
+            switchToRegistrationButton = new JButton("Switch to Registration");
+
+            // Make fields non-editable by default
+            nameField.setEditable(false);
+            emailField.setEditable(false);
+            usernameField.setEditable(false);
+            genderField.setEditable(false);
+
+            // Update the fields with the user's information
+            this.setCurrentUser(currentUser);
+            updateFields();
+
+            add(nameLabel);
+            add(nameField);
+            add(emailLabel);
+            add(emailField);
+            add(usernameLabel);
+            add(usernameField);
+            add(genderLabel);
+            add(genderField);
+            add(editProfileButton);
+            add(clearButton);
+            add(switchToLoginButton);
+            add(switchToRegistrationButton);
+
+            // Action listeners
+            editProfileButton.addActionListener(this::actionPerformed);
+            switchToLoginButton.addActionListener(this::actionPerformed);
+            switchToRegistrationButton.addActionListener(this::actionPerformed);
+            clearButton.addActionListener(this::actionPerformed);
+        }
+
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == switchToLoginButton) {
-                SwingUtilities.invokeLater(Login::new);  
+                SwingUtilities.invokeLater(Login::new);
             }
             if (e.getSource() == switchToRegistrationButton) {
                 SwingUtilities.invokeLater(Registration::new);
@@ -170,10 +216,10 @@ public class Profile extends JFrame {
         }
 
         private void updateFields() {
-            nameField.setText(getCurrentUser().getName());
-            emailField.setText(getCurrentUser().getEmail());
-            usernameField.setText(getCurrentUser().getUsername());
-            genderField.setText(getCurrentUser().getGender());
+            nameField.setText(this.getCurrentUser().getUsername());
+            emailField.setText(this.getCurrentUser().getEmail());
+            usernameField.setText(this.getCurrentUser().getUsername());
+            genderField.setText(this.getCurrentUser().getGender());
         }
 
         private void saveChanges() {
