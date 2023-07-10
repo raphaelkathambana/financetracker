@@ -117,7 +117,7 @@ public class Registration extends JFrame {
                 // Validate the form inputs and save user data to the database
                 if (validateInput()) {
                     // Save user data to the database
-                    User.addNewUser(nameField.getText(), emailField.getText(), usernameField.getText(), String.valueOf(passwordField.getPassword()), genderComboBox.getSelectedItem());
+                    User.addNewUser(usernameField.getText(), emailField.getText(), String.valueOf(passwordField.getPassword()));
                     // If registration is successful, switch to the login panel
                     SwingUtilities.invokeLater(Login::new);
                 } else {

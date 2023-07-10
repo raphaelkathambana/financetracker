@@ -177,7 +177,18 @@ public class User {
         return user;
     }
 
-    public static void addNewUser(String text, String text2, String text3, String text4, Object selectedItem) {
-        // TODO add new user
+    public static void addNewUser(String text, String text2, String text3) {
+        // add new user
+        
+            final String INSERT_USER="INSERT INTO `user_info` (`username`, `email`,`password`) VALUES (?,?,?);";
+            try (var statement = GetConnection.getConn().prepareStatement(INSERT_USER);) {
+                statement.setString(1, text);
+                statement.setString(2, text2);
+                statement.setString(3, text3);
+                statement.executeUpdate();
+                System.out.println("User added successfully.");
+            } catch (SQLException e) {
+                System.out.println("Error occurred while adding the user: " + e.getMessage());
+            }
     }
 }
