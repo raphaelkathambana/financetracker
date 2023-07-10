@@ -1,5 +1,7 @@
 package util;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,9 +35,23 @@ public class Transaction { // Declare the Transaction class
     public java.sql.Date getSqlDate() {
         return java.sql.Date.valueOf(this.date);
     }
+    public java.sql.Date getSqlDate(LocalDate date) {
+        return java.sql.Date.valueOf(date);
+    }
 
-    public void saveToDB() { // Declare saveToDB method
+    public void saveToDB(int userID, String categoryID, long amount, LocalDate date) { 
         // code to save to mysql database
+        String query = "INSERT INTO transaction_info (userID, categoryID, Amount,Date)VALUES(?, ?, ?, ?);";
+        try (PreparedStatement statement = GetConnection.getConn().prepareStatement(query);) {
+            statement.setInt(1, userID);
+            statement.setString(2, categoryID);
+            statement.setLong(3, amount);
+            statement.setDate(4, getSqlDate(date));
+            statement.executeUpdate();
+            System.out.println("Transaction Saved.");
+        } catch (SQLException e) {
+            System.out.println("Error occurred during transaction: " + e.getMessage());
+        }
     }
 
     @Override
