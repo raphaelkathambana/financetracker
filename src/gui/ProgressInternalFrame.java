@@ -3,18 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package main;
+package gui;
 
 /**
  *
  * @author austi
  */
-public class progressGUI extends javax.swing.JInternalFrame {
+public class ProgressInternalFrame extends javax.swing.JInternalFrame {
 
     /**
      * Creates new form progressGUI
      */
-    public progressGUI() {
+    public ProgressInternalFrame() {
         initComponents();
     }
 
@@ -26,11 +26,15 @@ public class progressGUI extends javax.swing.JInternalFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        javax.swing.JLabel jLabel3;
+        javax.swing.JLabel jLabel2;
+        javax.swing.JLabel jLabel1;
+        javax.swing.JButton jButton1;
 
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        BTextField1 = new javax.swing.JTextField();
-        AmountTextField2 = new javax.swing.JTextField();
+        bTextField1 = new javax.swing.JTextField();
+        amountTextField2 = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         progressLabel = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -38,13 +42,14 @@ public class progressGUI extends javax.swing.JInternalFrame {
 
         setBackground(new java.awt.Color(255, 255, 204));
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        String fontName = "Tahoma";
+        jLabel1.setFont(new java.awt.Font(fontName, 0, 18)); // NOI18N
         jLabel1.setText("Budget Amount: ");
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel2.setFont(new java.awt.Font(fontName, 0, 18)); // NOI18N
         jLabel2.setText("Amount Spent: ");
 
-        BTextField1.addInputMethodListener(new java.awt.event.InputMethodListener() {
+        bTextField1.addInputMethodListener(new java.awt.event.InputMethodListener() {
             public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
                 BTextField1InputMethodTextChanged(evt);
             }
@@ -52,27 +57,24 @@ public class progressGUI extends javax.swing.JInternalFrame {
             }
         });
 
-        AmountTextField2.addInputMethodListener(new java.awt.event.InputMethodListener() {
+        amountTextField2.addInputMethodListener(new java.awt.event.InputMethodListener() {
             public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
                 AmountTextField2InputMethodTextChanged(evt);
             }
             public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
             }
         });
-        AmountTextField2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                AmountTextField2ActionPerformed(evt);
-            }
-        });
+        amountTextField2.addActionListener(this::AmountTextField2ActionPerformed);
 
         jButton1.setText("Calculate");
         jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jButton1MouseClicked(evt);
             }
         });
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel3.setFont(new java.awt.Font(fontName, 0, 18)); // NOI18N
         jLabel3.setText("Your Progress Amount is: ");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -91,8 +93,8 @@ public class progressGUI extends javax.swing.JInternalFrame {
                     .addComponent(alertLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 279, Short.MAX_VALUE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(progressLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(BTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 279, Short.MAX_VALUE)
-                        .addComponent(AmountTextField2)
+                        .addComponent(bTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 279, Short.MAX_VALUE)
+                        .addComponent(amountTextField2)
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(58, Short.MAX_VALUE))
         );
@@ -102,11 +104,11 @@ public class progressGUI extends javax.swing.JInternalFrame {
                 .addGap(83, 83, 83)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(BTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(bTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(39, 39, 39)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(AmountTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(amountTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(35, 35, 35)
@@ -122,35 +124,31 @@ public class progressGUI extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void AmountTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AmountTextField2ActionPerformed
-        // TODO add your handling code here:
     }//GEN-LAST:event_AmountTextField2ActionPerformed
 
     private void BTextField1InputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_BTextField1InputMethodTextChanged
-        // TODO add your handling code here:
-        String amount = BTextField1.getText();
+        String amount = bTextField1.getText();
         int budgetAmount = Integer.parseInt(amount);
     }//GEN-LAST:event_BTextField1InputMethodTextChanged
 
     private void AmountTextField2InputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_AmountTextField2InputMethodTextChanged
-        // TODO add your handling code here:
-        String amount2 = AmountTextField2.getText();
+        String amount2 = amountTextField2.getText();
         int AmountSpent = Integer.parseInt(amount2);
     }//GEN-LAST:event_AmountTextField2InputMethodTextChanged
 
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
-        // TODO add your handling code here:
-        String amount = BTextField1.getText();
+        String amount = bTextField1.getText();
         int budgetAmount = Integer.parseInt(amount);
-        String amount2 = AmountTextField2.getText();
-        int AmountSpent = Integer.parseInt(amount2);
+        String amount2 = amountTextField2.getText();
+        int amountSpent = Integer.parseInt(amount2);
         
         int progressAmount;
-        progressAmount = budgetAmount - AmountSpent;
+        progressAmount = budgetAmount - amountSpent;
         
         progressLabel.setText(Integer.toString(progressAmount));
         
                
-        if(budgetAmount > AmountSpent){
+        if(budgetAmount > amountSpent){
             alertLabel.setText("You are within budget");
         }else{
             alertLabel.setText("You are beyond your budget");
@@ -159,13 +157,9 @@ public class progressGUI extends javax.swing.JInternalFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField AmountTextField2;
-    private javax.swing.JTextField BTextField1;
+    private javax.swing.JTextField amountTextField2;
+    private javax.swing.JTextField bTextField1;
     private javax.swing.JLabel alertLabel;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel progressLabel;
     // End of variables declaration//GEN-END:variables
 }
