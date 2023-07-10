@@ -117,7 +117,9 @@ public class Registration extends JFrame {
                 // Validate the form inputs and save user data to the database
                 if (validateInput()) {
                     // Save user data to the database
-                    User.addNewUser(usernameField.getText(), emailField.getText(), String.valueOf(passwordField.getPassword()));
+                    // username, Name, email, password, Gender
+                    User.addNewUser(usernameField.getText(), nameField.getText(), emailField.getText(),
+                            String.valueOf(passwordField.getPassword()), getSelectedGender());
                     // If registration is successful, switch to the login panel
                     SwingUtilities.invokeLater(Login::new);
                 } else {
@@ -127,6 +129,7 @@ public class Registration extends JFrame {
 
             }
         }
+
         public boolean validateInput() {
             var regexPattern = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
                     + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
@@ -142,6 +145,19 @@ public class Registration extends JFrame {
                     !password.isEmpty() &&
                     !confirmPassword.isEmpty() &&
                     password.equals(confirmPassword);
+        }
+
+        public String getSelectedGender() {
+            // get the specific gender based on the genderComboBox
+            int selectedIndex = genderComboBox.getSelectedIndex();
+            switch (selectedIndex) {
+                case 0:
+                    return "Male";
+                case 1:
+                    return "Female";
+                default:
+                    return "I Identify As"; // No preference/not specified
+            }
         }
     }
 
