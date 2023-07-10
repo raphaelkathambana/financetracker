@@ -46,9 +46,10 @@ DROP table IF EXISTS `user_info`;
 CREATE TABLE if NOT exists `user_info`(
     `userID` VARCHAR(255) NOT NULL,
     `username` VARCHAR(255) NOT NULL,
+    `Name` VARCHAR(255) NOT NULL,
     `email` VARCHAR(255) NOT NULL,
     `password` VARCHAR(255) NOT NULL,
-    `user_amount` BIGINT NOT NULL
+    `Gender` VARCHAR(255) NOT NULL
 );
 ALTER TABLE `user_info` ADD PRIMARY KEY(`userID`);
 
@@ -82,3 +83,146 @@ ALTER TABLE `budget` ADD CONSTRAINT `budget_userid_foreign` FOREIGN KEY(`userID`
 ALTER TABLE `Goal` ADD CONSTRAINT `Goal_userid_foreign` FOREIGN KEY(`userID`) REFERENCES `income_table`(`userID`);
 ALTER TABLE `transaction_info` ADD CONSTRAINT `transaction_info_categoryid_foreign` FOREIGN KEY(`categoryID`) REFERENCES `category`(`categoryID`);
 ALTER TABLE `transaction_info` ADD CONSTRAINT `transaction_info_userid_foreign` FOREIGN KEY(`userID`) REFERENCES `income_table`(`userID`);
+
+
+
+use finance_tracker;
+ 
+ALTER TABLE category
+ADD COLUMN description varchar(255);
+
+ALTER TABLE category
+ADD COLUMN parent_category_id varchar(255);
+
+ALTER TABLE category
+RENAME COLUMN categoryName TO name;
+
+
+INSERT INTO Category (categoryID, name, description, parent_category_id)
+VALUES ('C-001', 'Income', 'All sources of income', NULL);
+
+INSERT INTO Category (categoryID, name, description, parent_category_id)
+VALUES ('C-002', 'Expenses', 'All types of expenses', NULL);
+
+
+
+INSERT INTO Category (categoryID, name, description, parent_category_id)
+VALUES ('C-003', 'Salary', 'Regular salary income', 'C-001');
+
+INSERT INTO Category (categoryID, name, description, parent_category_id)
+VALUES ('C-004', 'Freelance Income', 'Income from freelance work', 'C-001');
+
+INSERT INTO Category (categoryID, name, description, parent_category_id)
+VALUES ('C-005', 'Rental Income', 'Income from property rentals', 'C-001');
+
+INSERT INTO Category (categoryID, name, description, parent_category_id)
+VALUES ('C-006', 'Investment Income', 'Income from investments', 'C-001');
+
+
+
+INSERT INTO Category (categoryID, name, description, parent_category_id)
+VALUES ('C-007', 'Housing', 'Expenses related to housing', 'C-002');
+
+INSERT INTO Category (categoryID, name, description, parent_category_id)
+VALUES ('C-008', 'Transportation', 'Expenses on transportation', 'C-002');
+
+INSERT INTO Category (categoryID, name, description, parent_category_id)
+VALUES ('C-009', 'Food and Dining', 'Expenses on food and dining', 'C-002');
+
+INSERT INTO Category (categoryID, name, description, parent_category_id)
+VALUES ('C-010', 'Entertainment', 'Expenses on entertainment', 'C-002');
+
+INSERT INTO Category (categoryID, name, description, parent_category_id)
+VALUES ('C-011', 'Shopping', 'Expenses on shopping', 'C-002');
+
+INSERT INTO Category (categoryID, name, description, parent_category_id)
+VALUES ('C-012', 'Health', 'Expenses on health', 'C-002');
+
+INSERT INTO Category (categoryID, name, description, parent_category_id)
+VALUES ('C-013', 'Debt Payments', 'Expenses on debt payments', 'C-002');
+
+INSERT INTO Category (categoryID, name, description, parent_category_id)
+VALUES ('C-014', 'Education', 'Expenses on education', 'C-002');
+
+
+INSERT INTO Category (categoryID, name, description, parent_category_id)
+VALUES ('C-015', 'Rent/Mortgage', 'Monthly rent or mortgage payments', 'C-007');
+
+INSERT INTO Category (categoryID, name, description, parent_category_id)
+VALUES ('C-016', 'Utilities', 'Expenses for utilities like electricity, water, etc.', 'C-007');
+
+INSERT INTO Category (categoryID, name, description, parent_category_id)
+VALUES ('C-017', 'Home Maintenance', 'Expenses for home maintenance and repairs', 'C-007');
+
+
+
+INSERT INTO Category (categoryID, name, description, parent_category_id)
+VALUES ('C-018', 'Fuel', 'Expenses on fuel', 'C-008');
+
+INSERT INTO Category (categoryID, name, description, parent_category_id)
+VALUES ('C-019', 'Vehicle Maintenance', 'Expenses for vehicle maintenance and repairs', 'C-008');
+
+INSERT INTO Category (categoryID, name, description, parent_category_id)
+VALUES ('C-020', 'Public Transportation', 'Expenses for public transportation', 'C-008');
+
+
+
+INSERT INTO Category (categoryID, name, description, parent_category_id)
+VALUES ('C-021', 'Groceries', 'Expenses on groceries', 'C-009');
+
+INSERT INTO Category (categoryID, name, description, parent_category_id)
+VALUES ('C-022', 'Restaurants', 'Expenses on dining at restaurants', 'C-009');
+
+INSERT INTO Category (categoryID, name, description, parent_category_id)
+VALUES ('C-023', 'Fast Food', 'Expenses on fast food', 'C-009');
+
+
+
+INSERT INTO Category (categoryID, name, description, parent_category_id)
+VALUES ('C-024', 'Movies', 'Expenses on movies', 'C-010');
+
+INSERT INTO Category (categoryID, name, description, parent_category_id)
+VALUES ('C-025', 'Concerts', 'Expenses on concerts', 'C-010');
+
+INSERT INTO Category (categoryID, name, description, parent_category_id)
+VALUES ('C-026', 'Sports Events', 'Expenses on sports events', 'C-010');
+
+
+
+INSERT INTO Category (categoryID, name, description, parent_category_id)
+VALUES ('C-027', 'Clothing', 'Expenses on clothing', 'C-011');
+
+INSERT INTO Category (categoryID, name, description, parent_category_id)
+VALUES ('C-028', 'Electronics', 'Expenses on electronics', 'C-011');
+
+INSERT INTO Category (categoryID, name, description, parent_category_id)
+VALUES ('C-029', 'Personal Care', 'Expenses on personal care items', 'C-011');
+
+
+
+INSERT INTO Category (categoryID, name, description, parent_category_id)
+VALUES ('C-030', 'Insurance', 'Expenses on insurance', 'C-012');
+
+INSERT INTO Category (categoryID, name, description, parent_category_id)
+VALUES ('C-031', 'Medical Expenses', 'Expenses on medical treatments and medications', 'C-012');
+
+INSERT INTO Category (categoryID, name, description, parent_category_id)
+VALUES ('C-032', 'Fitness', 'Expenses on fitness-related activities', 'C-012');
+
+-- Inserting subcategories under "Debt Payments"
+
+INSERT INTO Category (categoryID, name, description, parent_category_id)
+VALUES ('C-033', 'Loans', 'Expenses on loan payments', 'C-013');
+
+INSERT INTO Category (categoryID, name, description, parent_category_id)
+VALUES ('C-034', 'Credit Cards', 'Expenses on credit card payments', 'C-013');
+
+
+INSERT INTO Category (categoryID, name, description, parent_category_id)
+VALUES ('C-035', 'Tuition Fees', 'Expenses on tuition fees', 'C-014');
+
+INSERT INTO Category (categoryID, name, description, parent_category_id)
+VALUES ('C-036', 'Books and Supplies', 'Expenses on books and supplies', 'C-014');
+
+INSERT INTO Category (categoryID, name, description, parent_category_id)
+VALUES ('C-037', 'Online Courses', 'Expenses on online courses', 'C-014');
