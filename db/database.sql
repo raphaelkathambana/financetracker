@@ -58,12 +58,11 @@ CREATE TABLE if NOT exists `user_info`(
 
 DROP table IF EXISTS `transaction_info`;
 CREATE TABLE if NOT EXISTS `transaction_info` (
-    `transactionID` VARCHAR(255) NOT NULL,
+    `transactionID` INT(11) NOT NULL AUTO_INCREMENT,
     `userID` INT(4) NOT NULL,
     `categoryID` VARCHAR(255) NOT NULL,
     `Amount` BIGINT NOT NULL,
-    `Date` DATE NOT NULL,
-    `time` TIME NOT NULL
+    `Date` DATE NOT NULL
 );
 ALTER TABLE `transaction_info` ADD PRIMARY KEY(`transactionID`);
 
