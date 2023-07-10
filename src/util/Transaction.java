@@ -3,12 +3,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JOptionPane;
 import java.sql.*;
-import java.awt.*;
 
-
-        
 public class Transaction { // Declare the Transaction class
     private Category category; // Declare category variable
     private LocalDate date; // Declare date variable
