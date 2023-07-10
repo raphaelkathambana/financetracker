@@ -8,23 +8,24 @@ import java.util.Map;
 public class Budget {
     private String startDate;
     private String endDate;
-    private double totalIncome;
+    private double totalBudgetAmount;
     private double totalExpenses;
     private Map<Category, List<Double>> allocatedCategories;
 
     public Budget(String startDate, String endDate) {
         this.startDate = startDate;
         this.endDate = endDate;
-        this.totalIncome = 0.0;
+        this.totalBudgetAmount = 0.0;
         this.totalExpenses = 0.0;
         this.allocatedCategories = new HashMap<>();
     }
 
-    public void setTotalIncome(double totalIncome) {
-        this.totalIncome = totalIncome;
+    public void setTotalBudgetAmount(double totalIncome) {
+        this.totalBudgetAmount = totalIncome;
     }
 
     public void allocateCategoryBudget(Category category, double amount) {
+        totalBudgetAmount += amount;
         List<Double> amountMap = new ArrayList<>();
         amountMap.add(amount);
         amountMap.add(0.0);
@@ -55,7 +56,7 @@ public class Budget {
         System.out.println("Budget Report:");
         System.out.println("Start Date: " + startDate);
         System.out.println("End Date: " + endDate);
-        System.out.println("Total Income: " + totalIncome);
+        System.out.println("Total Budget Amount: " + totalBudgetAmount);
         System.out.println("Total Expenses: " + totalExpenses);
 
         for (Map.Entry<Category, List<Double>> entry : allocatedCategories.entrySet()) {
@@ -84,8 +85,8 @@ public class Budget {
         this.endDate = endDate;
     }
 
-    public double getTotalIncome() {
-        return totalIncome;
+    public double getTotalBudgetAmount() {
+        return totalBudgetAmount;
     }
 
     public double getTotalExpenses() {
