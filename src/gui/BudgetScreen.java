@@ -7,6 +7,8 @@ package gui;
 
 import java.awt.Color;
 
+import javax.swing.WindowConstants;
+
 /**
  *
  * @author austi
@@ -59,6 +61,8 @@ public class BudgetScreen extends javax.swing.JFrame {
         jLabel1.setText("Set Your Budget");
         jLabel1.setToolTipText("");
         jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -163,14 +167,14 @@ public class BudgetScreen extends javax.swing.JFrame {
 
         viewScreen.setBackground(new java.awt.Color(255, 255, 204));
 
-        javax.swing.GroupLayout ViewScreenLayout = new javax.swing.GroupLayout(viewScreen);
-        viewScreen.setLayout(ViewScreenLayout);
-        ViewScreenLayout.setHorizontalGroup(
-            ViewScreenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout viewScreenLayout = new javax.swing.GroupLayout(viewScreen);
+        viewScreen.setLayout(viewScreenLayout);
+        viewScreenLayout.setHorizontalGroup(
+            viewScreenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
-        ViewScreenLayout.setVerticalGroup(
-            ViewScreenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        viewScreenLayout.setVerticalGroup(
+            viewScreenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 541, Short.MAX_VALUE)
         );
 
@@ -196,8 +200,10 @@ public class BudgetScreen extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void budgetButtonMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_budgetButtonMousePressed
-         budgetButton.setBackground(clickedColor);
-         progressButton.setBackground(defaultColor);
+        if(evt.getSource() == budgetButton) {
+            budgetButton.setBackground(clickedColor);
+            progressButton.setBackground(defaultColor);
+        }
     }//GEN-LAST:event_budgetButtonMousePressed
 
     private void progressButtonMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_progressButtonMousePressed
