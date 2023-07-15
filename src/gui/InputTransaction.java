@@ -47,8 +47,6 @@ public class InputTransaction extends javax.swing.JFrame {
 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">
     private void initComponents() {
-        javax.swing.JTextField categoryField;
-        javax.swing.JTextField dateField;
         javax.swing.JMenuItem jMenuItem1;
         javax.swing.JLabel jLabel5;
         javax.swing.JLabel jLabel3;
@@ -57,10 +55,8 @@ public class InputTransaction extends javax.swing.JFrame {
         javax.swing.JButton submitButton;
 
         jMenuItem1 = new javax.swing.JMenuItem();
-        dateField = new javax.swing.JTextField();
         amountField = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
-        categoryField = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
