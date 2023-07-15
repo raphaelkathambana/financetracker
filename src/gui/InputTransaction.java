@@ -1,12 +1,19 @@
 package gui;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.Locale.Category;
-import javax.swing.JOptionPane;
+import java.util.Date;
+import java.util.List;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Locale;
 
-import util.GetConnection;
+import javax.swing.JComboBox;
+
+import com.toedter.calendar.JCalendar;
+
+import main.CategoryExamples;
+import util.Category;
+import util.Transaction;
+import util.User;
 
 /**
  *
@@ -14,16 +21,22 @@ import util.GetConnection;
  */
 public class InputTransaction extends javax.swing.JFrame {
 
-    double amount;
-    String date;
+    long amount;
+    LocalDate date;
     String type;
     Category category;
+    List<Category> categories = CategoryExamples.getCategoryFromDb();
+    User currentUser;
 
     /**
      * Creates new form InputTransaction
      */
     public InputTransaction() {
         initComponents();
+    }
+    public InputTransaction(User user) {
+        initComponents();
+        this.currentUser = user;
     }
 
     /**
@@ -34,45 +47,48 @@ public class InputTransaction extends javax.swing.JFrame {
 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">
     private void initComponents() {
+        javax.swing.JTextField categoryField;
+        javax.swing.JTextField dateField;
         javax.swing.JMenuItem jMenuItem1;
         javax.swing.JLabel jLabel5;
-        javax.swing.JLabel jLabel4;
         javax.swing.JLabel jLabel3;
         javax.swing.JLabel jLabel2;
         javax.swing.JLabel jLabel1;
         javax.swing.JButton submitButton;
 
         jMenuItem1 = new javax.swing.JMenuItem();
-        typeField = new javax.swing.JTextField();
         dateField = new javax.swing.JTextField();
         amountField = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         categoryField = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         submitButton = new javax.swing.JButton();
+
+        categoryComboBox = new JComboBox<>();
+        for (Category ct : categories) {
+            categoryComboBox.addItem(ct.getName());
+        }
 
         jMenuItem1.setText("jMenuItem1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        typeField.setText(" ");
-
-        dateField.setText(" ");
-
-        amountField.setText(" ");
-
         jLabel1.setText("CATEGORY:");
-
-        categoryField.setText(" ");
-
         jLabel2.setText("AMOUNT:");
-
         jLabel3.setText("DATE:");
 
-        jLabel4.setText("TYPE:");
+        datePick = new JCalendar();
+        datePick.setLocale(Locale.US);
+        datePick.setWeekOfYearVisible(false);
+        datePick.setTodayButtonVisible(true);
+        datePick.setTodayButtonText("TODAY");
+        datePick.setNullDateButtonVisible(false);
+        datePick.setDecorationBackgroundColor(java.awt.Color.white);
+        datePick.setSundayForeground(java.awt.Color.red);
+        datePick.setDecorationBackgroundVisible(true);
+        datePick.setDecorationBordersVisible(true);
 
         jLabel5.setFont(new java.awt.Font("Trebuchet MS", 1, 36)); // NOI18N
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -80,7 +96,7 @@ public class InputTransaction extends javax.swing.JFrame {
 
         submitButton.setFont(new java.awt.Font("Tahoma", 3, 24)); // NOI18N
         submitButton.setText("SUBMIT");
-        submitButton.addActionListener(this::SubmitButtonActionPerformed);
+        submitButton.addActionListener(this::submitButtonActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -100,8 +116,6 @@ public class InputTransaction extends javax.swing.JFrame {
                                                                 113, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                         .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE,
                                                                 113, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                113, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE,
                                                                 113, javax.swing.GroupLayout.PREFERRED_SIZE))
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED,
@@ -114,20 +128,16 @@ public class InputTransaction extends javax.swing.JFrame {
                                                                         javax.swing.GroupLayout.Alignment.LEADING)
                                                                         .addComponent(amountField,
                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                245,
+                                                                                350,
                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                        .addComponent(dateField,
+                                                                        .addComponent(datePick,
                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                245,
-                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                        .addComponent(typeField,
-                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                245,
+                                                                                350,
                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE))
                                                                 .addGap(215, 215, 215))
                                                         .addGroup(layout.createSequentialGroup()
-                                                                .addComponent(categoryField,
-                                                                        javax.swing.GroupLayout.PREFERRED_SIZE, 245,
+                                                                .addComponent(categoryComboBox,
+                                                                        javax.swing.GroupLayout.PREFERRED_SIZE, 350,
                                                                         javax.swing.GroupLayout.PREFERRED_SIZE)
                                                                 .addPreferredGap(
                                                                         javax.swing.LayoutStyle.ComponentPlacement.RELATED,
@@ -146,16 +156,13 @@ public class InputTransaction extends javax.swing.JFrame {
                                         .addGroup(layout.createSequentialGroup()
                                                 .addGap(34, 34, 34)
                                                 .addGroup(layout
-                                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                        .addComponent(typeField, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                64, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                        .createParallelGroup(
+                                                                javax.swing.GroupLayout.Alignment.BASELINE))
                                                 .addGap(51, 51, 51)
                                                 .addGroup(layout
                                                         .createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                        .addComponent(dateField, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(datePick, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                265, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                         .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE,
                                                                 64, javax.swing.GroupLayout.PREFERRED_SIZE))
                                                 .addGap(40, 40, 40)
@@ -171,7 +178,7 @@ public class InputTransaction extends javax.swing.JFrame {
                                                         .createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE,
                                                                 64, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(categoryField,
+                                                        .addComponent(categoryComboBox,
                                                                 javax.swing.GroupLayout.PREFERRED_SIZE, 45,
                                                                 javax.swing.GroupLayout.PREFERRED_SIZE))
                                                 .addContainerGap(56, Short.MAX_VALUE))
@@ -186,28 +193,19 @@ public class InputTransaction extends javax.swing.JFrame {
         pack();
     }// </editor-fold>
 
-    private void SubmitButtonActionPerformed(java.awt.event.ActionEvent evt) {
-
-        amount = Double.parseDouble(amountField.getText());
-        type = String.valueOf(typeField.getText());
-        date = String.valueOf(dateField.getText());
-        category = Category.valueOf(categoryField.getText());
-
-        try (Statement stmt = GetConnection.getConn().createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);) {
-            stmt.executeUpdate("INSERT INTO transactions (Type, Date, Amount, Category ) VALUES(type, date,'" + amount + "','" + category + "');");
-            JOptionPane.showMessageDialog(InputTransaction.this, "Record saved!");
-
-        } catch (SQLException err) {
-            System.out.println(err.getMessage());
-            JOptionPane.showMessageDialog(InputTransaction.this, "unable to record");
-        }
-
+    private void submitButtonActionPerformed(java.awt.event.ActionEvent evt) {
+        amount = Long.parseLong(amountField.getText());
+        category = CategoryExamples.searchForCategory(categories, ((String) categoryComboBox.getSelectedItem()));
+        Date picked = datePick.getDate();
+        date = picked.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        Transaction.saveToDB(2, category.getId(), amount, date);
     }
+
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         /* Set the Nimbus look and feel */
         // <editor-fold defaultstate="collapsed" desc=" Look and feel setting code
         // (optional) ">
@@ -224,10 +222,11 @@ public class InputTransaction extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+                | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(InputTransaction.class.getName()).log(java.util.logging.Level.SEVERE,
                     null, ex);
-        }   
+        }
         // </editor-fold>
 
         /* Create and display the form */
@@ -236,8 +235,8 @@ public class InputTransaction extends javax.swing.JFrame {
 
     // Variables declaration - do not modify
     private javax.swing.JTextField amountField;
-    private javax.swing.JTextField categoryField;
-    private javax.swing.JTextField dateField;
-    private javax.swing.JTextField typeField;
+    private JCalendar datePick;
+    private JComboBox<String> categoryComboBox;
+
     // End of variables declaration
 }

@@ -4,13 +4,22 @@ public class Category {
     private String name;
     private String description;
     private Category parentCategory;
-
+    private String id;
 
     public Category(String name, String description, Category parentCategory) {
         this.name = name;
         this.description = description;
         this.parentCategory = parentCategory;
     }
+    
+    public Category(String name, String description, String id, Category parentCategory) {
+        this.name = name;
+        this.description = description;
+        this.id = id;
+        this.parentCategory = parentCategory;
+    }
+    
+
 
     public Category(String name, String description) {
         this.name = name;
@@ -39,6 +48,14 @@ public class Category {
 
     public void setParentCategory(Category parentCategory) {
         this.parentCategory = parentCategory;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
 }

@@ -34,11 +34,11 @@ public class Transaction { // Declare the Transaction class
     public java.sql.Date getSqlDate() {
         return java.sql.Date.valueOf(this.date);
     }
-    public java.sql.Date getSqlDate(LocalDate date) {
+    public static java.sql.Date getSqlDate(LocalDate date) {
         return java.sql.Date.valueOf(date);
     }
 
-    public void saveToDB(int userID, String categoryID, long amount, LocalDate date) { 
+    public static void saveToDB(int userID, String categoryID, long amount, LocalDate date) { 
         // code to save to mysql database
         String query = "INSERT INTO transaction_info (userID, categoryID, Amount,Date)VALUES(?, ?, ?, ?);";
         try (PreparedStatement statement = GetConnection.getConn().prepareStatement(query);) {

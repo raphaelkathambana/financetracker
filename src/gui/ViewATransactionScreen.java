@@ -2,11 +2,12 @@ package gui;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 import util.GetConnection;
 
-import java.sql.Statement;
 
 /**
  *
@@ -17,7 +18,7 @@ public class ViewATransactionScreen extends javax.swing.JFrame {
     String type;
 
     /**
-     * Creates new form viewtransaction
+     * Creates new form view transaction
      */
     public ViewATransactionScreen() {
         initComponents();
@@ -26,35 +27,33 @@ public class ViewATransactionScreen extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">
     private void initComponents() {
         javax.swing.JScrollPane jScrollPane1;
-        javax.swing.JLabel ViewTransactions;
-        javax.swing.JTextField SearchField;
-        javax.swing.JButton SearchBttn;
+        javax.swing.JLabel viewTransactions;
+        javax.swing.JButton searchBttn;
 
-        SearchField = new javax.swing.JTextField();
-        SearchBttn = new javax.swing.JButton();
+        searchField = new javax.swing.JTextField();
+        searchBttn = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         transactionTable = new javax.swing.JTable();
-        ViewTransactions = new javax.swing.JLabel();
+        viewTransactions = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        SearchField.setText(" ");
-        SearchField.addActionListener(this::SearchFieldActionPerformed);
+        searchField.addActionListener(this::searchFieldActionPerformed);
 
-        SearchBttn.setText("SEARCH");
-        SearchBttn.addActionListener(this::SearchBttnActionPerformed);
+        searchBttn.setText("SEARCH");
+        searchBttn.addActionListener(this::searchBttnActionPerformed);
 
         transactionTable.setModel(new javax.swing.table.DefaultTableModel(
                 new Object[][] {
 
                 },
                 new String[] {
-                        "Type", "Date ", "Amount", "Category"
+                        "Date", "Amount", "Category"
                 }));
         jScrollPane1.setViewportView(transactionTable);
 
-        ViewTransactions.setFont(new java.awt.Font("Rockwell Condensed", 1, 36)); // NOI18N
-        ViewTransactions.setText("VIEW TRANSACTIONS");
+        viewTransactions.setFont(new java.awt.Font("Rockwell Condensed", 1, 36)); // NOI18N
+        viewTransactions.setText("VIEW TRANSACTIONS");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -65,25 +64,25 @@ public class ViewATransactionScreen extends javax.swing.JFrame {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                         .addComponent(jScrollPane1)
                                         .addGroup(layout.createSequentialGroup()
-                                                .addComponent(SearchField)
+                                                .addComponent(searchField)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(SearchBttn)))
+                                                .addComponent(searchBttn)))
                                 .addGap(32, 32, 32))
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addContainerGap(263, Short.MAX_VALUE)
-                                .addComponent(ViewTransactions)
+                                .addComponent(viewTransactions)
                                 .addGap(303, 303, 303)));
         layout.setVerticalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
                                 .addContainerGap()
-                                .addComponent(ViewTransactions, javax.swing.GroupLayout.PREFERRED_SIZE, 52,
+                                .addComponent(viewTransactions, javax.swing.GroupLayout.PREFERRED_SIZE, 52,
                                         javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(SearchField, javax.swing.GroupLayout.PREFERRED_SIZE, 41,
+                                        .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, 41,
                                                 javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(SearchBttn, javax.swing.GroupLayout.PREFERRED_SIZE, 41,
+                                        .addComponent(searchBttn, javax.swing.GroupLayout.PREFERRED_SIZE, 41,
                                                 javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE,
@@ -93,26 +92,41 @@ public class ViewATransactionScreen extends javax.swing.JFrame {
         pack();
     }// </editor-fold>
 
-    private void SearchBttnActionPerformed(java.awt.event.ActionEvent evt) {
-        try (Statement stmt = GetConnection.getConn().createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);){
-            String query = "SELECT * from attendees where transactionID = 1;";
-            ResultSet rs = stmt.executeQuery(query);
-            while (rs.next()) {
-                String transactionType = rs.getString("type");
-                String date = rs.getString("date");
-                String amount = rs.getString("amount");
-                String category = rs.getString("category");
+    private void searchBttnActionPerformed(java.awt.event.ActionEvent evt) {
+        String query = "SELECT * from `transaction_info` where `categoryID` = ?;";
+        try (java.sql.PreparedStatement preparedStmt = GetConnection.getConn().prepareStatement(query);) {
+            String date = "";
+            String amount = "";
+            String category = "";
+            preparedStmt.setString(1, searchField.getText());
+            ResultSet rs = preparedStmt.executeQuery();
+            DefaultTableModel tblModel = (DefaultTableModel) transactionTable.getModel();
 
-                String[] data = { transactionType, date, amount, category };
-                DefaultTableModel tblModel = (DefaultTableModel) transactionTable.getModel();
+            rs.next();
+            if (rs.wasNull()) {
+                JOptionPane.showMessageDialog(this, "No results Found", "Error", JOptionPane.ERROR_MESSAGE);
+            } else {
+                date = rs.getString(5);
+                amount = rs.getString(4);
+                category = rs.getString(3);
+                String[] data = { date, amount, category };
+                tblModel.addRow(data);
+            }
+            while (rs.next()) {
+                date = rs.getString(5);
+                amount = rs.getString(4);
+                category = rs.getString(3);
+                String[] data = { date, amount, category };
                 tblModel.addRow(data);
             }
         } catch (SQLException err) {
             System.out.println(err.getMessage());
+        } catch (NullPointerException err) {
+            JOptionPane.showMessageDialog(this, "No results Found", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
-    private void SearchFieldActionPerformed(java.awt.event.ActionEvent evt) {
+    private void searchFieldActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
     }
 
@@ -136,10 +150,12 @@ public class ViewATransactionScreen extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ViewATransactionScreen.class.getName()).log(java.util.logging.Level.SEVERE,
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+                | javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(ViewATransactionScreen.class.getName()).log(
+                    java.util.logging.Level.SEVERE,
                     null, ex);
-        }   
+        }
         // </editor-fold>
 
         /* Create and display the form */
@@ -148,5 +164,7 @@ public class ViewATransactionScreen extends javax.swing.JFrame {
 
     // Variables declaration - do not modify
     private javax.swing.JTable transactionTable;
+    private javax.swing.JTextField searchField;
+
     // End of variables declaration
 }

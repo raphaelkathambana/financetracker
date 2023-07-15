@@ -62,9 +62,9 @@ CREATE TABLE if NOT EXISTS `transaction_info` (
     `userID` INT(4) NOT NULL,
     `categoryID` VARCHAR(255) NOT NULL,
     `Amount` BIGINT NOT NULL,
-    `Date` DATE NOT NULL
+    `Date` DATE NOT NULL,
+    PRIMARY KEY(`transactionID`)
 );
-ALTER TABLE `transaction_info` ADD PRIMARY KEY(`transactionID`);
 
 DROP table IF EXISTS `Goal`;
 CREATE TABLE if NOT EXISTS `Goal` (
@@ -84,7 +84,7 @@ ALTER TABLE `report` ADD CONSTRAINT `report_userid_foreign` FOREIGN KEY(`userID`
 ALTER TABLE `budget` ADD CONSTRAINT `budget_userid_foreign` FOREIGN KEY(`userID`) REFERENCES `income_table`(`userID`);
 ALTER TABLE `Goal` ADD CONSTRAINT `Goal_userid_foreign` FOREIGN KEY(`userID`) REFERENCES `income_table`(`userID`);
 ALTER TABLE `transaction_info` ADD CONSTRAINT `transaction_info_categoryid_foreign` FOREIGN KEY(`categoryID`) REFERENCES `category`(`categoryID`);
-ALTER TABLE `transaction_info` ADD CONSTRAINT `transaction_info_userid_foreign` FOREIGN KEY(`userID`) REFERENCES `income_table`(`userID`);
+ALTER TABLE `transaction_info` ADD CONSTRAINT `transaction_info_userid_foreign` FOREIGN KEY(`userID`) REFERENCES `user_info`(`userID`);
 
 use finance_tracker;
  
@@ -225,3 +225,15 @@ VALUES ('C-036', 'Books and Supplies', 'Expenses on books and supplies', 'C-014'
 
 INSERT INTO Category (categoryID, name, description, parent_category_id)
 VALUES ('C-037', 'Online Courses', 'Expenses on online courses', 'C-014');
+
+SELECT * FROM Category WHERE parent_category_id = null and categoryID = 'C-001';
+SELECT * FROM Category WHERE parent_category_id = 'C-002';
+SELECT * FROM Category WHERE parent_category_id = 'C-003';
+SELECT * FROM Category WHERE parent_category_id = 'C-004';
+SELECT * FROM Category WHERE parent_category_id = 'C-005';
+SELECT * FROM Category WHERE parent_category_id = 'C-006';
+SELECT * FROM Category WHERE parent_category_id = 'C-007';
+SELECT * FROM Category WHERE parent_category_id = 'C-008';
+SELECT * FROM Category WHERE parent_category_id = 'C-009';
+SELECT * FROM Category WHERE parent_category_id = 'C-010';
+
