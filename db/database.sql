@@ -4,43 +4,34 @@ use finance_tracker;
 
 DROP TABLE IF EXISTS `report`;
 CREATE TABLE IF not EXISTS `report` (
-    `reportID` VARCHAR(255) NOT NULL,
+    `reportID` INT(3) NOT NULL AUTO_INCREMENT,
     `reportName` VARCHAR(255) NOT NULL,
     `userID` INT(4) NOT NULL,
     `startDate` DATE NOT NULL,
-    `finishDate` DATE NOT NULL
+    `finishDate` DATE NOT NULL,
+    PRIMARY KEY(`reportID`)
 );
-ALTER TABLE `report` ADD PRIMARY KEY(`reportID`);
 
 DROP TABLE IF EXISTS `budget`;
 CREATE TABLE if NOT EXISTS `budget` (
-    `budgetID` VARCHAR(255) NOT NULL,
+    `budgetID` INT(3) NOT NULL AUTO_INCREMENT,
     `budgetName` VARCHAR(255) NOT NULL,
     `userID` INT(4) NOT NULL,
-    `categoryID` VARCHAR(255) NOT NULL,
+    `categoryID` VARCHAR(6) NOT NULL,
     `budgetAmount` BIGINT NOT NULL,
     `usedAmount` BIGINT NOT NULL,
     `Balance` BIGINT NOT NULL,
     `startDate` DATE NOT NULL,
-    `endDate` DATE NOT NULL
+    `endDate` DATE NOT NULL,
+    PRIMARY KEY(`budgetID`)
 );
-ALTER TABLE
-    `budget` ADD PRIMARY KEY(`budgetID`);
 
 DROP table IF EXISTS `category`;    
 CREATE TABLE if NOT EXISTS `category` (
-    `categoryID` VARCHAR(255) NOT NULL,
-    `categoryName` VARCHAR(255) NOT NULL
+    `categoryID` VARCHAR(6) NOT NULL,
+    `categoryName` VARCHAR(255) NOT NULL,
+    PRIMARY KEY(`categoryID`)
 );
-ALTER TABLE `category` ADD PRIMARY KEY(`categoryID`);
-
-DROP table IF EXISTS `income_table`;
-CREATE TABLE IF not EXISTS `income_table` (
-    `incomeID` VARCHAR(255) NOT NULL,
-    `userID` INT(4) NOT NULL,
-    `amount` BIGINT NOT NULL
-);
-ALTER TABLE `income_table` ADD PRIMARY KEY(`incomeID`);
 
 DROP table IF EXISTS `user_info`;
 CREATE TABLE if NOT exists `user_info`(
@@ -60,7 +51,7 @@ DROP table IF EXISTS `transaction_info`;
 CREATE TABLE if NOT EXISTS `transaction_info` (
     `transactionID` INT(11) NOT NULL AUTO_INCREMENT,
     `userID` INT(4) NOT NULL,
-    `categoryID` VARCHAR(255) NOT NULL,
+    `categoryID` VARCHAR(6) NOT NULL,
     `Amount` BIGINT NOT NULL,
     `Date` DATE NOT NULL,
     PRIMARY KEY(`transactionID`)
@@ -68,21 +59,19 @@ CREATE TABLE if NOT EXISTS `transaction_info` (
 
 DROP table IF EXISTS `Goal`;
 CREATE TABLE if NOT EXISTS `Goal` (
-    `goal_ID` VARCHAR(255) NOT NULL,
+    `goal_ID` INT(3) NOT NULL AUTO_INCREMENT,
     `userID` INT(4) NOT NULL,
     `goalAmount` BIGINT NOT NULL,
     `Amount` BIGINT NOT NULL,
     `dateStarted` DATE NOT NULL,
     `dateFinished` DATE NOT NULL,
-    `Duration` INT NOT NULL
+    `Duration` INT NOT NULL,PRIMARY KEY(`goal_ID`)
 );
-ALTER TABLE `Goal` ADD PRIMARY KEY(`goal_ID`);
 
 ALTER TABLE `budget` ADD CONSTRAINT `budget_categoryid_foreign` FOREIGN KEY(`categoryID`) REFERENCES `category`(`categoryID`);
-ALTER TABLE `income_table` ADD CONSTRAINT `income_table_userid_foreign` FOREIGN KEY(`userID`) REFERENCES `user_info`(`userID`);
-ALTER TABLE `report` ADD CONSTRAINT `report_userid_foreign` FOREIGN KEY(`userID`) REFERENCES `income_table`(`userID`);
-ALTER TABLE `budget` ADD CONSTRAINT `budget_userid_foreign` FOREIGN KEY(`userID`) REFERENCES `income_table`(`userID`);
-ALTER TABLE `Goal` ADD CONSTRAINT `Goal_userid_foreign` FOREIGN KEY(`userID`) REFERENCES `income_table`(`userID`);
+ALTER TABLE `report` ADD CONSTRAINT `report_userid_foreign` FOREIGN KEY(`userID`) REFERENCES `user_info`(`userID`);
+ALTER TABLE `budget` ADD CONSTRAINT `budget_userid_foreign` FOREIGN KEY(`userID`) REFERENCES `user_info`(`userID`);
+ALTER TABLE `Goal` ADD CONSTRAINT `Goal_userid_foreign` FOREIGN KEY(`userID`) REFERENCES `user_info`(`userID`);
 ALTER TABLE `transaction_info` ADD CONSTRAINT `transaction_info_categoryid_foreign` FOREIGN KEY(`categoryID`) REFERENCES `category`(`categoryID`);
 ALTER TABLE `transaction_info` ADD CONSTRAINT `transaction_info_userid_foreign` FOREIGN KEY(`userID`) REFERENCES `user_info`(`userID`);
 

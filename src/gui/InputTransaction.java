@@ -194,7 +194,7 @@ public class InputTransaction extends javax.swing.JFrame {
         category = CategoryExamples.searchForCategory(categories, ((String) categoryComboBox.getSelectedItem()));
         Date picked = datePick.getDate();
         date = picked.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        Transaction.saveToDB(2, category.getId(), amount, date);
+        Transaction.saveToDB(1, category.getId(), amount, date);
     }
 
 
