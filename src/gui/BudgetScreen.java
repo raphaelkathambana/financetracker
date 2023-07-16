@@ -6,6 +6,7 @@
 package gui;
 
 import java.awt.Color;
+import java.awt.event.MouseEvent;
 
 import javax.swing.WindowConstants;
 
@@ -20,17 +21,16 @@ public class BudgetScreen extends javax.swing.JFrame {
      */
     Color defaultColor;
     Color clickedColor;
-    
+
     public BudgetScreen() {
         initComponents();
-        
-        defaultColor= new Color(200,240,150);
-        clickedColor= new Color(255,255,204);
-        
+
+        defaultColor = new Color(200, 240, 150);
+        clickedColor = new Color(255, 255, 204);
+
         budgetButton.setBackground(defaultColor);
         progressButton.setBackground(defaultColor);
-        
-    
+
     }
 
     /**
@@ -67,16 +67,15 @@ public class BudgetScreen extends javax.swing.JFrame {
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addContainerGap())
-        );
+                jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel1)
+                                .addContainerGap()));
         jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 87, Short.MAX_VALUE)
-        );
+                jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING,
+                                javax.swing.GroupLayout.DEFAULT_SIZE, 87, Short.MAX_VALUE));
 
         jPanel3.setBackground(new java.awt.Color(200, 240, 150));
 
@@ -84,11 +83,12 @@ public class BudgetScreen extends javax.swing.JFrame {
         budgetButton.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                budgetButtonMouseClicked(evt);
+                clickActionPerformed(evt);
             }
+
             @Override
             public void mousePressed(java.awt.event.MouseEvent evt) {
-                budgetButtonMousePressed(evt);
+                pressActionPerformed(evt);
             }
         });
 
@@ -98,30 +98,29 @@ public class BudgetScreen extends javax.swing.JFrame {
         javax.swing.GroupLayout budgetButtonLayout = new javax.swing.GroupLayout(budgetButton);
         budgetButton.setLayout(budgetButtonLayout);
         budgetButtonLayout.setHorizontalGroup(
-            budgetButtonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(budgetButtonLayout.createSequentialGroup()
-                .addGap(55, 55, 55)
-                .addComponent(jLabel4)
-                .addContainerGap(50, Short.MAX_VALUE))
-        );
+                budgetButtonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(budgetButtonLayout.createSequentialGroup()
+                                .addGap(55, 55, 55)
+                                .addComponent(jLabel4)
+                                .addContainerGap(50, Short.MAX_VALUE)));
         budgetButtonLayout.setVerticalGroup(
-            budgetButtonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, budgetButtonLayout.createSequentialGroup()
-                .addContainerGap(19, Short.MAX_VALUE)
-                .addComponent(jLabel4)
-                .addContainerGap())
-        );
+                budgetButtonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, budgetButtonLayout.createSequentialGroup()
+                                .addContainerGap(19, Short.MAX_VALUE)
+                                .addComponent(jLabel4)
+                                .addContainerGap()));
 
         progressButton.setBackground(new java.awt.Color(200, 240, 150));
         progressButton.setPreferredSize(new java.awt.Dimension(192, 57));
         progressButton.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                progressButtonMouseClicked(evt);
+                clickActionPerformed(evt);
             }
+
             @Override
             public void mousePressed(java.awt.event.MouseEvent evt) {
-                progressButtonMousePressed(evt);
+                pressActionPerformed(evt);
             }
         });
 
@@ -131,87 +130,109 @@ public class BudgetScreen extends javax.swing.JFrame {
         javax.swing.GroupLayout progressButtonLayout = new javax.swing.GroupLayout(progressButton);
         progressButton.setLayout(progressButtonLayout);
         progressButtonLayout.setHorizontalGroup(
-            progressButtonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, progressButtonLayout.createSequentialGroup()
-                .addContainerGap(31, Short.MAX_VALUE)
-                .addComponent(jLabel8)
-                .addGap(41, 41, 41))
-        );
+                progressButtonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
+                                progressButtonLayout.createSequentialGroup()
+                                        .addContainerGap(31, Short.MAX_VALUE)
+                                        .addComponent(jLabel8)
+                                        .addGap(41, 41, 41)));
         progressButtonLayout.setVerticalGroup(
-            progressButtonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, progressButtonLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel8)
-                .addContainerGap())
-        );
+                progressButtonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
+                                progressButtonLayout.createSequentialGroup()
+                                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jLabel8)
+                                        .addContainerGap()));
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(47, 47, 47)
-                .addComponent(budgetButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(47, 47, 47)
-                .addComponent(progressButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(280, Short.MAX_VALUE))
-        );
+                jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGap(47, 47, 47)
+                                .addComponent(budgetButton, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                        javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(47, 47, 47)
+                                .addComponent(progressButton, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                        javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(280, Short.MAX_VALUE)));
         jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap(25, Short.MAX_VALUE)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(budgetButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(progressButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-        );
+                jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addContainerGap(25, Short.MAX_VALUE)
+                                .addGroup(jPanel3Layout
+                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(budgetButton, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(progressButton, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))));
 
         viewScreen.setBackground(new java.awt.Color(255, 255, 204));
 
         javax.swing.GroupLayout viewScreenLayout = new javax.swing.GroupLayout(viewScreen);
         viewScreen.setLayout(viewScreenLayout);
         viewScreenLayout.setHorizontalGroup(
-            viewScreenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+                viewScreenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 0, Short.MAX_VALUE));
         viewScreenLayout.setVerticalGroup(
-            viewScreenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 541, Short.MAX_VALUE)
-        );
+                viewScreenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 541, Short.MAX_VALUE));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(viewScreen)
-        );
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.TRAILING,
+                                javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                Short.MAX_VALUE)
+                        .addComponent(viewScreen));
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(viewScreen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                        javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED,
+                                        javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                        javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(viewScreen, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                        javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)));
 
         pack();
-    }// </editor-fold>//GEN-END:initComponents
+    }
 
-    private void budgetButtonMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_budgetButtonMousePressed
-        if(evt.getSource() == budgetButton) {
+    private void clickActionPerformed(MouseEvent evt) {
+        if (evt.getSource() == progressButton) {
+            progressButtonMouseClicked();
+        }
+        if (evt.getSource() == budgetButton) {
+            budgetButtonMouseClicked();
+        }
+    }
+
+    private void pressActionPerformed(MouseEvent evt) {
+        if (evt.getSource() == budgetButton) {
+            budgetButtonMousePressed();
+        }
+        if (evt.getSource() == progressButton) {
+            progressButtonMousePressed();
+        }
+    }
+
+    private void budgetButtonMousePressed() {
             budgetButton.setBackground(clickedColor);
             progressButton.setBackground(defaultColor);
-        }
-    }//GEN-LAST:event_budgetButtonMousePressed
+    }
 
-    private void progressButtonMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_progressButtonMousePressed
-         progressButton.setBackground(clickedColor);
-         budgetButton.setBackground(defaultColor);
-    }//GEN-LAST:event_progressButtonMousePressed
+    private void progressButtonMousePressed() {
+        progressButton.setBackground(clickedColor);
+        budgetButton.setBackground(defaultColor);
+    }
 
-    private void budgetButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_budgetButtonMouseClicked
+    private void budgetButtonMouseClicked() {
         viewScreen.removeAll();
         SetBudgetInternalFrame budget = new SetBudgetInternalFrame();
         viewScreen.add(budget);
@@ -219,20 +240,19 @@ public class BudgetScreen extends javax.swing.JFrame {
         viewScreen.repaint();
         budget.setVisible(true);
 
-    }//GEN-LAST:event_budgetButtonMouseClicked
+    }
 
-    private void progressButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_progressButtonMouseClicked
+    private void progressButtonMouseClicked() {
         ProgressInternalFrame progress = new ProgressInternalFrame();
         viewScreen.removeAll();
         viewScreen.add(progress).setVisible(true);
-    }//GEN-LAST:event_progressButtonMouseClicked
+    }// GEN-LAST:event_progressButtonMouseClicked
 
     public static void main(String[] args) {
         BudgetScreen budgetGUI = new BudgetScreen();
         budgetGUI.setVisible(true);
     }
-    
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDesktopPane viewScreen;
     private javax.swing.JPanel budgetButton;
