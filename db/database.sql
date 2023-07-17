@@ -17,13 +17,22 @@ CREATE TABLE if NOT EXISTS `budget` (
     `budgetID` INT(3) NOT NULL AUTO_INCREMENT,
     `budgetName` VARCHAR(255) NOT NULL,
     `userID` INT(4) NOT NULL,
+    `budgetAmount` BIGINT NOT NULL,
+    `startDate` DATE NOT NULL,
+    `endDate` DATE NOT NULL,
+    PRIMARY KEY(`budgetID`)
+);
+
+DROP table if exists `budget_progress`;
+CREATE TABLE if NOT EXISTS `budget_progress` (
+    `budget_progressID` INT(3) NOT NULL AUTO_INCREMENT,
+    `budgetID` INT(3) NOT NULL,
+    `userID` INT(4) NOT NULL,
     `categoryID` VARCHAR(6) NOT NULL,
     `budgetAmount` BIGINT NOT NULL,
     `usedAmount` BIGINT NOT NULL,
     `Balance` BIGINT NOT NULL,
-    `startDate` DATE NOT NULL,
-    `endDate` DATE NOT NULL,
-    PRIMARY KEY(`budgetID`)
+    PRIMARY KEY(`budget_progressID`)
 );
 
 DROP table IF EXISTS `category`;    
@@ -68,12 +77,13 @@ CREATE TABLE if NOT EXISTS `Goal` (
     `Duration` INT NOT NULL,PRIMARY KEY(`goal_ID`)
 );
 
-ALTER TABLE `budget` ADD CONSTRAINT `budget_categoryid_foreign` FOREIGN KEY(`categoryID`) REFERENCES `category`(`categoryID`);
 ALTER TABLE `report` ADD CONSTRAINT `report_userid_foreign` FOREIGN KEY(`userID`) REFERENCES `user_info`(`userID`);
 ALTER TABLE `budget` ADD CONSTRAINT `budget_userid_foreign` FOREIGN KEY(`userID`) REFERENCES `user_info`(`userID`);
 ALTER TABLE `Goal` ADD CONSTRAINT `Goal_userid_foreign` FOREIGN KEY(`userID`) REFERENCES `user_info`(`userID`);
 ALTER TABLE `transaction_info` ADD CONSTRAINT `transaction_info_categoryid_foreign` FOREIGN KEY(`categoryID`) REFERENCES `category`(`categoryID`);
 ALTER TABLE `transaction_info` ADD CONSTRAINT `transaction_info_userid_foreign` FOREIGN KEY(`userID`) REFERENCES `user_info`(`userID`);
+ALTER TABLE `budget_progress` ADD CONSTRAINT `budget_progress_categoryid_foreign` FOREIGN KEY(`categoryID`) REFERENCES `category`(`categoryID`);
+ALTER TABLE `budget_progress` ADD CONSTRAINT `budget_progress_userid_foreign` FOREIGN KEY(`userID`) REFERENCES `user_info`(`userID`);
 
 use finance_tracker;
  

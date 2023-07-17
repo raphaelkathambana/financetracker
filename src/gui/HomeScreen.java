@@ -5,15 +5,29 @@
  */
 package gui;
 
+import javax.swing.SwingUtilities;
+
+import util.DatabaseThread;
+import util.User;
+
 /**
  *
  * @author manuella
  */
 public class HomeScreen extends javax.swing.JFrame {
-
+    User currentUser;
+    DatabaseThread databaseThread;
    
     public HomeScreen() {
         initComponents();
+        setVisible(true);
+    }
+
+    public HomeScreen(DatabaseThread databaseThread, User currentUser) {
+        this.currentUser = currentUser;
+        this.databaseThread = databaseThread;
+        initComponents();
+        setVisible(true);
     }
 
     /**
@@ -267,8 +281,11 @@ public class HomeScreen extends javax.swing.JFrame {
         pack();
     }// </editor-fold>                        
 
-    private void signoutActionPerformed(java.awt.event.ActionEvent evt) {                                        
-        System.exit(0);
+    private void signoutActionPerformed(java.awt.event.ActionEvent evt) { 
+        databaseThread.setLoggedIn(false);  
+        databaseThread.interrupt();
+        SwingUtilities.invokeLater(() -> new Login(databaseThread));
+        this.dispose();
     }                                       
 
     /**

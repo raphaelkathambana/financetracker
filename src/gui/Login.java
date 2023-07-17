@@ -2,6 +2,7 @@ package gui;
 
 import javax.swing.*;
 
+import util.DatabaseThread;
 import util.User;
 
 import java.awt.*;
@@ -35,6 +36,20 @@ public class Login extends JFrame {
         add(contentPane);
         setVisible(true);
     }
+    public Login(DatabaseThread databaseThread) {
+        setTitle(LOGIN_TEXT);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setSize(600, 500);
+        setLocationRelativeTo(null);
+
+        contentPane = new JPanel(new CardLayout());
+        loginPanel = new LoginPanel(databaseThread);
+
+        contentPane.add(loginPanel, LOGIN_PAGE);
+
+        add(contentPane);
+        setVisible(true);
+    }
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(Login::new);
@@ -48,6 +63,7 @@ public class Login extends JFrame {
         private JCheckBox showPassword;
         private JButton btnRegister;
         private transient User currentUser = null;
+        private DatabaseThread databaseThread;
 
         public User getCurrentUser() {
             return currentUser;
@@ -117,10 +133,72 @@ public class Login extends JFrame {
             });
         }
 
+        public LoginPanel(DatabaseThread databaseThread) {
+            // initialize container properties
+            setLayout(null);
+
+            var lbTitle = new JLabel(LOGIN_PAGE);
+            lbTitle.setFont(new Font("Serif", Font.BOLD, 20));
+
+            JLabel usernameLabel = new JLabel(USERNAME);
+            usernameField = new JTextField(USERNAME);
+            usernameField.setForeground(Color.LIGHT_GRAY);
+            JLabel passwordLabel = new JLabel(PASSWORD);
+            passwordField = new JPasswordField();
+            showPassword = new javax.swing.JCheckBox(SHOW_PASSWORD);
+
+            btnRegister = new JButton("Register");
+            loginButton = new JButton(LOGIN_TEXT);
+            forgotPasswordButton = new JButton(FORGOT_PASSWORD);
+
+            // deciding location for the components since we have no layout
+            lbTitle.setBounds(300, 110, 400, 30);
+            usernameLabel.setBounds(130, 160, 200, 30);
+            passwordLabel.setBounds(130, 210, 200, 30);
+            usernameField.setBounds(260, 160, 200, 30);
+            passwordField.setBounds(260, 210, 200, 30);
+            showPassword.setBounds(260, 250, 150, 15);
+            loginButton.setBounds(250, 275, 100, 30);
+            btnRegister.setBounds(370, 275, 100, 30);
+
+            // add to container
+            add(lbTitle);
+            add(usernameLabel);
+            add(usernameField);
+            add(passwordLabel);
+            add(passwordField);
+            add(showPassword);
+            add(loginButton);
+            add(btnRegister);
+            add(forgotPasswordButton);
+
+            // Action listeners
+            loginButton.addActionListener(this::actionPerformed);
+            forgotPasswordButton.addActionListener(this::actionPerformed);
+            btnRegister.addActionListener(this::actionPerformed);
+            showPassword.addActionListener(this::showPasswordActionPerformed);
+            usernameField.addFocusListener(this);
+            passwordField.addFocusListener(this);
+            addWindowListener(new java.awt.event.WindowAdapter() {
+                @Override
+                public void windowOpened(java.awt.event.WindowEvent evt) {
+                    usernameField.requestFocus();
+                }
+            });
+            passwordField.addKeyListener(new java.awt.event.KeyAdapter() {
+                @Override
+                public void keyPressed(java.awt.event.KeyEvent evt) {
+                    pfPasswordPressed(evt);
+                }
+            });
+
+            this.databaseThread = databaseThread;
+        }
+
         private boolean authenticateUser(String username, String password) {
             // Authentication logic
             // return true if the user is authenticated, false otherwise
-            
+
             this.setCurrentUser(User.authenticateUser(username, password));
             return currentUser != null;
         }
@@ -170,15 +248,20 @@ public class Login extends JFrame {
             String password = new String(passwordField.getPassword());
 
             // Perform authentication logic here
-
             if (authenticateUser(username, password)) {
                 JOptionPane.showMessageDialog(LoginPanel.this, "Welcome " + username, "Login Success",
-                        JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.INFORMATION_MESSAGE);
+                // Start the DatabaseThread
+                databaseThread.setLoggedIn(true);
+                databaseThread.setCurrentUser(currentUser);
+                databaseThread.start();
 
                 // If authentication is successful, switch to the profile panel
-                SwingUtilities.invokeLater(() -> new Profile(getCurrentUser()));
+                SwingUtilities.invokeLater(() -> new HomeScreen(databaseThread, getCurrentUser()));
+                this.getParent().getParent().setVisible(false);
             } else {
-                JOptionPane.showMessageDialog(LoginPanel.this, "Invalid username or password", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(LoginPanel.this, "Invalid username or password", "Error",
+                        JOptionPane.ERROR_MESSAGE);
             }
         }
 

@@ -16,18 +16,17 @@ public class BudgetTest {
     public void testTrackExpense() {
         Category foodCategory = new Category("Food and Dining", "Expenses on food and dining", parentCategory.EXPENSE.getCategory());
         Budget budget = new Budget("2023-01-01", "2023-12-31");
-        double expense = 1000;
+        long expense = 1000;
         budget.allocateCategoryBudget(foodCategory, expense);
 
         // Track expenses
-        budget.trackExpense(foodCategory, 800.0);
+        budget.trackExpense(foodCategory, 800);
 
-        for (Map.Entry<Category, List<Double>> entry : budget.getAllocatedCategories().entrySet()) {
-            List<Double> allocatedAmount = entry.getValue();
+        for (Map.Entry<Category, List<Long>> entry : budget.getAllocatedCategories().entrySet()) {
+            List<Long> allocatedAmount = entry.getValue();
 
-            double total = allocatedAmount.get(0) + allocatedAmount.get(1);
-            double epsilon = 0.000001d;
-            assertEquals(total, expense, epsilon);
+            long total = allocatedAmount.get(0) + allocatedAmount.get(1);
+            assertEquals(total, expense);
         }
     }
 }

@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import util.Budget;
 import util.Category;
 import util.GetConnection;
 import util.parentCategory;
@@ -48,6 +49,16 @@ public class CategoryExamples {
         var list = getCategoryFromDb();
         System.out.println("Category: " + list.get(15).getName() + " and Parent Category: "
                 + list.get(15).getParentCategory().getName());
+
+        Budget budget = new Budget("2023-01-01", "2023-01-31");
+
+        budget.allocateCategoryBudget(list.get(4), 1000);
+        budget.allocateCategoryBudget(list.get(5), 500);
+        budget.allocateCategoryBudget(list.get(6), 2000);
+
+        budget.trackExpense(list.get(5), 160);
+
+        budget.generateBudgetReport();
     }
 
     public static List<Category> getCategoryFromDb() {
@@ -76,6 +87,31 @@ public class CategoryExamples {
             System.out.println("Error: " + e.getMessage());
         }
         return list;
+    }
+
+    public static Category getCategoryFromId(String id) {
+        var query = "SELECT * FROM Category WHERE categoryID = ?;";
+        Category category = null;
+        try (var connect = GetConnection.getConn();
+                var stat = connect.prepareStatement(query);) {
+            stat.setString(1, id);
+
+            var rs = stat.executeQuery();
+            rs.next();
+            if (rs.getString(1).equals(INCOME_ID)) {
+                category = parentCategory.INCOME.getCategory();
+            }
+            if (rs.getString(1).equals(EXPENSE_ID)) {
+                category = parentCategory.EXPENSE.getCategory();
+            }
+            if (!rs.getString(1).equals(INCOME_ID) && !rs.getString(1).equals(EXPENSE_ID)) {
+                category = new Category(rs.getString(2), rs.getString(3), rs.getString(1),
+                        getParentCategoryFromId(rs.getString(4)));
+            }
+        } catch (SQLException e) {
+            System.out.println("Problem: " + e.getMessage());
+        }
+        return category;
     }
 
     public static Category getParentCategoryFromId(String parentId) {

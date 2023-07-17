@@ -8,9 +8,9 @@ import java.sql.*;
 public class Transaction { // Declare the Transaction class
     private Category category; // Declare category variable
     private LocalDate date; // Declare date variable
-    private double amount; // Declare amount variable
+    private long amount; // Declare amount variable
 
-    public Transaction(String dateString, double amount, Category category) {
+    public Transaction(String dateString, long amount, Category category) {
         this.date = LocalDate.parse(dateString);
         this.amount = amount;
         this.category = category;
@@ -81,7 +81,7 @@ public class Transaction { // Declare the Transaction class
         return amount;
     }
 
-    public void setAmount(double amount) {
+    public void setAmount(long amount) {
         this.amount = amount;
     }
 
