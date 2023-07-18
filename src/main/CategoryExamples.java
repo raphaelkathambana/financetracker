@@ -49,7 +49,6 @@ public class CategoryExamples {
         budget.allocateCategoryBudget(list.get(6), 2000);
 
         budget.trackExpense(list.get(5), 160);
-
         budget.generateBudgetReport();
     }
 }

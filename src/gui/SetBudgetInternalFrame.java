@@ -12,20 +12,29 @@ import javax.swing.JComboBox;
 
 import util.Budget;
 import util.Category;
+import util.DatabaseThread;
+import util.User;
 
 /**
  *
  * @author austi
  */
 public class SetBudgetInternalFrame extends javax.swing.JInternalFrame {
-
-    Budget budget = new  Budget("2023-01-01", "2023-31-12");
+    User currentUser;
+    DatabaseThread databaseThread;
+    Budget selectedBudget;
     List<Category> categories = Category.getCategoryFromDb();
 
     /**
      * Creates new form setBudgetGUI
      */
     public SetBudgetInternalFrame() {
+        initComponents();
+    }
+
+    public SetBudgetInternalFrame(Budget selectedBudget, DatabaseThread databaseThread) {
+        this.selectedBudget = selectedBudget;
+        this.databaseThread = databaseThread;
         initComponents();
     }
 
@@ -73,9 +82,8 @@ public class SetBudgetInternalFrame extends javax.swing.JInternalFrame {
         jButton2.setFont(new java.awt.Font(fontName, 0, 18)); // NOI18N
         jButton2.setText("Reset");
 
-        jButton2.addActionListener(this::jButton2MouseClicked);        
+        jButton2.addActionListener(this::jButton2MouseClicked);
         jButton1.addActionListener(this::jButton1MouseClicked);
-
 
         jLabel3.setText("Income, Expenses, Transportation,");
 
@@ -164,8 +172,10 @@ public class SetBudgetInternalFrame extends javax.swing.JInternalFrame {
     private void jButton1MouseClicked(ActionEvent e) {
         int budgetAmount = Integer.parseInt(amountField2.getText());
         Category category = Category.searchForCategory(categories, ((String) categoryComboBox.getSelectedItem()));
-        budget.allocateCategoryBudget(category, budgetAmount);
-        budget.generateBudgetReport();
+        Budget newBudget = new Budget(selectedBudget.getBudgetName(), selectedBudget.getStartDate(), selectedBudget.getEndDate());
+        newBudget.allocateCategoryBudget(category, budgetAmount);
+        databaseThread.updateUserBudget(newBudget);
+        newBudget.generateBudgetReport();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

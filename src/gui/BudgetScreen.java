@@ -8,6 +8,7 @@ package gui;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
 
+import javax.swing.JOptionPane;
 import javax.swing.WindowConstants;
 
 import util.DatabaseThread;
@@ -254,13 +255,21 @@ public class BudgetScreen extends javax.swing.JFrame {
     }
 
     private void budgetButtonMouseClicked() {
-        viewScreen.removeAll();
-        SetBudgetInternalFrame budget = new SetBudgetInternalFrame();
-        viewScreen.add(budget);
-        viewScreen.revalidate();
-        viewScreen.repaint();
-        budget.setVisible(true);
+        var budget = databaseThread.getUserBudgets();
 
+        int option = JOptionPane.showOptionDialog(this, "Select a budget", "budget Selection", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, budget.toArray(), null);
+
+        if (option == -1) {
+            return;
+        }
+        if (option != -1) {
+            viewScreen.removeAll();
+            SetBudgetInternalFrame budgetInternalFrame = new SetBudgetInternalFrame(budget.get(option), databaseThread);
+            viewScreen.add(budgetInternalFrame);
+            viewScreen.revalidate();
+            viewScreen.repaint();
+            budgetInternalFrame.setVisible(true);
+        }
     }
 
     private void progressButtonMouseClicked() {

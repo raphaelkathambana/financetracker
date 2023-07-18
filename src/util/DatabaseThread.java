@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.JOptionPane;
 
@@ -115,7 +116,7 @@ public class DatabaseThread extends Thread {
         }
     }
 
-    private void fetchUserTransactions() {
+    private List<Transaction> fetchUserTransactions() {
         int userId = currentUser.getId();
         String query = "SELECT transactionID, categoryID, Amount, Date FROM transaction_info WHERE userID = ?;";
 
@@ -156,6 +157,7 @@ public class DatabaseThread extends Thread {
         // For example, you can store the list in a variable or pass it to another
         // method for further processing
         // ...
+        return transactions;
     }
 
     private List<Budget> fetchUserBudget() {
@@ -206,5 +208,30 @@ public class DatabaseThread extends Thread {
     }
     public List<Budget> getUserBudgets() {
         return fetchUserBudget();
+    }
+    
+    public List<Transaction> getUserTransactions() {
+        return fetchUserTransactions();
+    }
+
+    public void updateUserBudget(Budget newBudget) {
+        var query = "INSERT INTO budget_progress ( budgetID, userID, categoryID, budgetAmount, usedAmount, Balance ) VALUES ( ?, ?, ?, ?, ?, ? );";
+        try (var connection = GetConnection.getConn();
+                PreparedStatement statement = connection.prepareStatement(query)) {
+            for (Map.Entry<Category, List<Long>> entry : newBudget.getAllocatedCategories().entrySet()) {
+                Category category = entry.getKey();
+                List<Long> allocatedAmount = entry.getValue();
+                statement.setInt(1, newBudget.getBudgetId(newBudget.getBudgetName()));
+                statement.setInt(2, getCurrentUser().getId());
+                statement.setString(3, category.getId());
+                statement.setLong(4, allocatedAmount.get(0) + allocatedAmount.get(1));
+                statement.setLong(5, allocatedAmount.get(1));
+                statement.setLong(6, allocatedAmount.get(0));
+                statement.executeUpdate();
+            }
+        } catch (SQLException e) {
+            System.out.println("Error occurred while updating user budget: " + e.getMessage());
+        }
+
     }
 }

@@ -1,13 +1,16 @@
 package gui;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.util.List;
+import java.util.ArrayList;
+
+import java.util.function.Supplier;
 
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
-import util.GetConnection;
-
+import util.DatabaseThread;
+import util.Transaction;
+import util.User;
 
 /**
  *
@@ -16,12 +19,22 @@ import util.GetConnection;
 public class ViewATransactionScreen extends javax.swing.JFrame {
 
     String type;
+    DatabaseThread databaseThread;
+    User currentUser;
 
     /**
      * Creates new form view transaction
      */
     public ViewATransactionScreen() {
         initComponents();
+        setVisible(true);
+    }
+
+    public ViewATransactionScreen(DatabaseThread databaseThread) {
+        this.databaseThread = databaseThread;
+        this.currentUser = databaseThread.getCurrentUser();
+        initComponents();
+        setVisible(true);
     }
 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">
@@ -93,36 +106,26 @@ public class ViewATransactionScreen extends javax.swing.JFrame {
     }// </editor-fold>
 
     private void searchBttnActionPerformed(java.awt.event.ActionEvent evt) {
-        String query = "SELECT * from `transaction_info` where `categoryID` = ?;";
-        try (java.sql.PreparedStatement preparedStmt = GetConnection.getConn().prepareStatement(query);) {
-            String date = "";
-            String amount = "";
-            String category = "";
-            preparedStmt.setString(1, searchField.getText());
-            ResultSet rs = preparedStmt.executeQuery();
-            DefaultTableModel tblModel = (DefaultTableModel) transactionTable.getModel();
-
-            rs.next();
-            if (rs.wasNull()) {
-                JOptionPane.showMessageDialog(this, "No results Found", "Error", JOptionPane.ERROR_MESSAGE);
-            } else {
-                date = rs.getString(5);
-                amount = rs.getString(4);
-                category = rs.getString(3);
-                String[] data = { date, amount, category };
-                tblModel.addRow(data);
+        var input = searchField.getText();
+        var transactions = databaseThread.getUserTransactions();
+        Supplier<List<Transaction>> searchedTransaction = () -> {
+            List<Transaction> searchVal = new ArrayList<>();
+            for (Transaction tx : transactions) {
+                if (tx.getCategory().getName().equals(input)) {
+                    searchVal.add(tx);
+                    break;
+                }
             }
-            while (rs.next()) {
-                date = rs.getString(5);
-                amount = rs.getString(4);
-                category = rs.getString(3);
-                String[] data = { date, amount, category };
-                tblModel.addRow(data);
-            }
-        } catch (SQLException err) {
-            System.out.println(err.getMessage());
-        } catch (NullPointerException err) {
+            return searchVal;
+        };
+        if (searchedTransaction.get() == null) {
             JOptionPane.showMessageDialog(this, "No results Found", "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+            DefaultTableModel tblModel = (DefaultTableModel) transactionTable.getModel();
+            for (Transaction tx : searchedTransaction.get()) {
+                String[] data = { tx.getDate().toString(), String.valueOf(tx.getAmount()), tx.getCategory().getName() };
+                tblModel.addRow(data);
+            }
         }
     }
 

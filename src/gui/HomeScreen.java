@@ -170,6 +170,7 @@ public class HomeScreen extends javax.swing.JFrame {
         button3.setFont(new java.awt.Font(DIALOG, 3, 24)); // NOI18N
         button3.setForeground(new java.awt.Color(153, 0, 0));
         button3.setLabel("View Transactions");
+        button3.addActionListener(this::viewATransactionActionPerformed);
 
         button4.setBackground(new java.awt.Color(255, 204, 204));
         button4.setFont(new java.awt.Font(DIALOG, 3, 24)); // NOI18N
@@ -186,6 +187,7 @@ public class HomeScreen extends javax.swing.JFrame {
         transaction.setFont(new java.awt.Font(DIALOG, 3, 24)); // NOI18N
         transaction.setForeground(new java.awt.Color(153, 0, 0));
         transaction.setLabel("Add Transaction");
+        transaction.addActionListener(this::transactionActionPerformed);
 
         button1.setBackground(new java.awt.Color(255, 204, 204));
         button1.setFont(new java.awt.Font(DIALOG, 3, 24)); // NOI18N
@@ -293,6 +295,16 @@ public class HomeScreen extends javax.swing.JFrame {
 
     private void viewBudgetActionPerformed(ActionEvent e) {
         SwingUtilities.invokeLater(() -> new BudgetScreen(this.databaseThread));
+        this.dispose();
+    }
+
+    private void transactionActionPerformed(ActionEvent e) {
+        SwingUtilities.invokeLater(() -> new InputTransaction(this.databaseThread));
+        this.dispose();
+    }
+
+    private void viewATransactionActionPerformed(ActionEvent e) {
+        SwingUtilities.invokeLater(() -> new ViewATransactionScreen(this.databaseThread));
         this.dispose();
     }                                                     
 }

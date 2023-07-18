@@ -111,7 +111,7 @@ public class Budget {
         }
     }
 
-    private int getBudgetId(String string) {
+    public int getBudgetId(String string) {
         var query = "SELECT budgetID FROM budget WHERE budgetName = ?;";
         int id = 0;
         try (var stat = GetConnection.getConn().prepareStatement(query);) {
