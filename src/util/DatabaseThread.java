@@ -68,8 +68,9 @@ public class DatabaseThread extends Thread {
                 Thread.sleep(60000); // Sleep for 1 minute (adjust as needed)
             } catch (InterruptedException e) {
                 e.printStackTrace();
-                JOptionPane.showMessageDialog(null, "DatabaseThread has been interrupted", "Error",
-                        JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "User Logged Out", "Log Out",
+                        JOptionPane.INFORMATION_MESSAGE);
+                this.interrupt();        
                 break;
             }
         }
