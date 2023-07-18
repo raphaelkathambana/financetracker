@@ -10,7 +10,6 @@ import javax.swing.JComboBox;
 
 import com.toedter.calendar.JCalendar;
 
-import main.CategoryExamples;
 import util.Category;
 import util.Transaction;
 import util.User;
@@ -25,7 +24,7 @@ public class InputTransaction extends javax.swing.JFrame {
     LocalDate date;
     String type;
     Category category;
-    List<Category> categories = CategoryExamples.getCategoryFromDb();
+    List<Category> categories = Category.getCategoryFromDb();
     User currentUser;
 
     /**
@@ -191,7 +190,7 @@ public class InputTransaction extends javax.swing.JFrame {
 
     private void submitButtonActionPerformed(java.awt.event.ActionEvent evt) {
         amount = Long.parseLong(amountField.getText());
-        category = CategoryExamples.searchForCategory(categories, ((String) categoryComboBox.getSelectedItem()));
+        category = Category.searchForCategory(categories, ((String) categoryComboBox.getSelectedItem()));
         Date picked = datePick.getDate();
         date = picked.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         Transaction.saveToDB(1, category.getId(), amount, date);

@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Properties;
 
-import util.Budget;
 import util.Category;
 import util.Report;
 import util.Transaction;

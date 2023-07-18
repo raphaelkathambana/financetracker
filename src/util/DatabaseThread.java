@@ -9,7 +9,6 @@ import java.util.List;
 import javax.swing.JOptionPane;
 
 import gui.Login;
-import main.CategoryExamples;
 
 public class DatabaseThread extends Thread {
     private User currentUser;
@@ -135,7 +134,7 @@ public class DatabaseThread extends Thread {
 
                 // Create a Transaction object with the fetched data
                 Transaction transaction = new Transaction(date.toString(), amount,
-                        CategoryExamples.getCategoryFromId(categoryId));
+                        Category.getCategoryFromId(categoryId));
 
                 // Add the transaction to the list
                 transactions.add(transaction);
@@ -193,7 +192,7 @@ public class DatabaseThread extends Thread {
                     long categoryBudgetAmount = progressResult.getLong("budgetAmount");
                     long categoryAmountSpent = progressResult.getLong("usedAmount");
 
-                    Category category = CategoryExamples.getCategoryFromId(categoryId);
+                    Category category = Category.getCategoryFromId(categoryId);
                     budget.allocateCategoryBudget(category, categoryBudgetAmount);
                     budget.trackExpense(category, categoryAmountSpent);
                 }

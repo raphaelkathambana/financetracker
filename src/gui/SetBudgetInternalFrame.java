@@ -10,7 +10,6 @@ import java.util.List;
 
 import javax.swing.JComboBox;
 
-import main.CategoryExamples;
 import util.Budget;
 import util.Category;
 
@@ -21,7 +20,7 @@ import util.Category;
 public class SetBudgetInternalFrame extends javax.swing.JInternalFrame {
 
     Budget budget = new  Budget("2023-01-01", "2023-31-12");
-    List<Category> categories = CategoryExamples.getCategoryFromDb();
+    List<Category> categories = Category.getCategoryFromDb();
 
     /**
      * Creates new form setBudgetGUI
@@ -164,7 +163,7 @@ public class SetBudgetInternalFrame extends javax.swing.JInternalFrame {
 
     private void jButton1MouseClicked(ActionEvent e) {
         int budgetAmount = Integer.parseInt(amountField2.getText());
-        Category category = CategoryExamples.searchForCategory(categories, ((String) categoryComboBox.getSelectedItem()));
+        Category category = Category.searchForCategory(categories, ((String) categoryComboBox.getSelectedItem()));
         budget.allocateCategoryBudget(category, budgetAmount);
         budget.generateBudgetReport();
     }
