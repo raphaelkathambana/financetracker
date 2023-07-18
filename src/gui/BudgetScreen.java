@@ -10,6 +10,9 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.WindowConstants;
 
+import util.DatabaseThread;
+import util.User;
+
 /**
  *
  * @author austi
@@ -21,15 +24,33 @@ public class BudgetScreen extends javax.swing.JFrame {
      */
     Color defaultColor;
     Color clickedColor;
+    DatabaseThread databaseThread;
+    User currentUser;
 
     public BudgetScreen() {
+        
         initComponents();
-
         defaultColor = new Color(200, 240, 150);
         clickedColor = new Color(255, 255, 204);
-
+        
         budgetButton.setBackground(defaultColor);
         progressButton.setBackground(defaultColor);
+
+        setVisible(true);
+    }
+
+    public BudgetScreen(DatabaseThread databaseThread) {
+        
+        this.databaseThread = databaseThread;
+        currentUser = databaseThread.getCurrentUser();
+        initComponents();
+        defaultColor = new Color(200, 240, 150);
+        clickedColor = new Color(255, 255, 204);
+        
+        budgetButton.setBackground(defaultColor);
+        progressButton.setBackground(defaultColor);
+
+        setVisible(true);
 
     }
 
@@ -62,7 +83,7 @@ public class BudgetScreen extends javax.swing.JFrame {
         jLabel1.setToolTipText("");
         jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
 
-        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -223,8 +244,8 @@ public class BudgetScreen extends javax.swing.JFrame {
     }
 
     private void budgetButtonMousePressed() {
-            budgetButton.setBackground(clickedColor);
-            progressButton.setBackground(defaultColor);
+        budgetButton.setBackground(clickedColor);
+        progressButton.setBackground(defaultColor);
     }
 
     private void progressButtonMousePressed() {
@@ -243,15 +264,10 @@ public class BudgetScreen extends javax.swing.JFrame {
     }
 
     private void progressButtonMouseClicked() {
-        ProgressInternalFrame progress = new ProgressInternalFrame();
+        ProgressInternalFrame progress = new ProgressInternalFrame(this.databaseThread);
         viewScreen.removeAll();
         viewScreen.add(progress).setVisible(true);
     }// GEN-LAST:event_progressButtonMouseClicked
-
-    public static void main(String[] args) {
-        BudgetScreen budgetGUI = new BudgetScreen();
-        budgetGUI.setVisible(true);
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDesktopPane viewScreen;

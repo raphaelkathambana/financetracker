@@ -158,7 +158,7 @@ public class DatabaseThread extends Thread {
         // ...
     }
 
-    private void fetchUserBudget() {
+    private List<Budget> fetchUserBudget() {
         int userId = currentUser.getId();
         Budget budget = null;
         List<Budget> budgetList = new ArrayList<>();
@@ -202,5 +202,9 @@ public class DatabaseThread extends Thread {
         } catch (SQLException e) {
             System.out.println("Error occurred while fetching user budget: " + e.getMessage());
         }
+        return budgetList;
+    }
+    public List<Budget> getUserBudgets() {
+        return fetchUserBudget();
     }
 }

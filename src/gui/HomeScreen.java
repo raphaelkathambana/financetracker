@@ -5,6 +5,8 @@
  */
 package gui;
 
+import java.awt.event.ActionEvent;
+
 import javax.swing.SwingUtilities;
 
 import util.DatabaseThread;
@@ -23,9 +25,9 @@ public class HomeScreen extends javax.swing.JFrame {
         setVisible(true);
     }
 
-    public HomeScreen(DatabaseThread databaseThread, User currentUser) {
-        this.currentUser = currentUser;
+    public HomeScreen(DatabaseThread databaseThread) {
         this.databaseThread = databaseThread;
+        this.currentUser = this.databaseThread.getCurrentUser();
         initComponents();
         setVisible(true);
     }
@@ -85,6 +87,7 @@ public class HomeScreen extends javax.swing.JFrame {
         viewBudget.setFont(new java.awt.Font(DIALOG, 3, 24)); // NOI18N
         viewBudget.setForeground(new java.awt.Color(255, 204, 204));
         viewBudget.setLabel("View budget\n");
+        viewBudget.addActionListener(this::viewBudgetActionPerformed);
 
         label1.setFont(new java.awt.Font(DIALOG, 3, 48)); // NOI18N
         label1.setForeground(new java.awt.Color(255, 204, 204));
@@ -284,32 +287,12 @@ public class HomeScreen extends javax.swing.JFrame {
     private void signoutActionPerformed(java.awt.event.ActionEvent evt) { 
         databaseThread.setLoggedIn(false);  
         databaseThread.interrupt();
-        SwingUtilities.invokeLater(() -> new Login(databaseThread));
+        SwingUtilities.invokeLater(() -> new Login(new DatabaseThread()));
         this.dispose();
-    }                                       
+    }
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(HomeScreen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }   
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new HomeScreen().setVisible(true));
-    }                
+    private void viewBudgetActionPerformed(ActionEvent e) {
+        SwingUtilities.invokeLater(() -> new BudgetScreen(this.databaseThread));
+        this.dispose();
+    }                                                     
 }

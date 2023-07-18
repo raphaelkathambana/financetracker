@@ -51,10 +51,6 @@ public class Login extends JFrame {
         setVisible(true);
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(Login::new);
-    }
-
     private class LoginPanel extends JPanel implements FocusListener {
         private JTextField usernameField;
         private JPasswordField passwordField;
@@ -64,10 +60,6 @@ public class Login extends JFrame {
         private JButton btnRegister;
         private transient User currentUser = null;
         private DatabaseThread databaseThread;
-
-        public User getCurrentUser() {
-            return currentUser;
-        }
 
         public void setCurrentUser(User currentUser) {
             this.currentUser = currentUser;
@@ -252,13 +244,13 @@ public class Login extends JFrame {
                 JOptionPane.showMessageDialog(LoginPanel.this, "Welcome " + username, "Login Success",
                 JOptionPane.INFORMATION_MESSAGE);
                 // Start the DatabaseThread
-                databaseThread.setLoggedIn(true);
-                databaseThread.setCurrentUser(currentUser);
-                databaseThread.start();
+                this.databaseThread.setLoggedIn(true);
+                this.databaseThread.setCurrentUser(currentUser);
+                this.databaseThread.start();
 
                 // If authentication is successful, switch to the profile panel
-                SwingUtilities.invokeLater(() -> new HomeScreen(databaseThread, getCurrentUser()));
-                this.getParent().getParent().setVisible(false);
+                SwingUtilities.invokeLater(() -> new HomeScreen(this.databaseThread));
+                SwingUtilities.getWindowAncestor(contentPane).dispose();
             } else {
                 JOptionPane.showMessageDialog(LoginPanel.this, "Invalid username or password", "Error",
                         JOptionPane.ERROR_MESSAGE);

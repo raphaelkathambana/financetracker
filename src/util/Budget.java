@@ -125,6 +125,11 @@ public class Budget {
         }
         return id;
     }
+
+    @Override
+    public String toString() {
+        return this.getBudgetName();
+    }
     
     public String getBudgetName() {
         return budgetName;
