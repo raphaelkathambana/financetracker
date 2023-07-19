@@ -7,20 +7,24 @@ package gui;
 
 import javax.swing.JOptionPane;
 
+import util.DatabaseThread;
+
 /**
  *
  * @author manuella
  */
 public class Support extends javax.swing.JFrame {
+    DatabaseThread databaseThread;
 
-    /**
-     * Creates new form Support
-     */
     public Support() {
         initComponents();
         setVisible(true);
     }
-
+    public Support(DatabaseThread databaseThread) {
+        this.databaseThread = databaseThread;
+        initComponents();
+        setVisible(true);
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

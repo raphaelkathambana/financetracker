@@ -18,6 +18,15 @@ public class User {
     private String password;
     private String username;
     private String gender;
+    private String name;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public String getGender() {
         return gender;
@@ -69,15 +78,15 @@ public class User {
         return user;
     }
 
-    public void updateUser(String newName, String newEmail, String newUsername, String newGender) {
+    public void updateUser() {
         // update query
         int userIdToUpdate = 0;
-        final String UPDATE_USER_QUERY = "UPDATE user_info SET username=?, email=?, username=?, gender=? where userID=?;";
+        final String UPDATE_USER_QUERY = "UPDATE user_info SET name=?, email=?, username=?, gender=? where userID=?;";
         try (var statement = GetConnection.getConn().prepareStatement(UPDATE_USER_QUERY);) {
-            statement.setString(1, newName);
-            statement.setString(2, newGender);
-            statement.setString(3, newEmail);
-            statement.setString(4, newUsername);
+            statement.setString(1, this.getName());
+            statement.setString(2, this.getGender());
+            statement.setString(3, this.getEmail());
+            statement.setString(4, this.getUsername());
             statement.setInt(5, userIdToUpdate);
             statement.executeUpdate();
             System.out.println("User updated successfully.");

@@ -214,6 +214,11 @@ public class DatabaseThread extends Thread {
         return fetchUserTransactions();
     }
 
+    public User getCurrentUserInfo() {
+        fetchUserData();
+        return this.currentUser;
+    }
+
     public void updateUserBudget(Budget newBudget) {
         var query = "INSERT INTO budget_progress ( budgetID, userID, categoryID, budgetAmount, usedAmount, Balance ) VALUES ( ?, ?, ?, ?, ?, ? );";
         try (var connection = GetConnection.getConn();
@@ -232,6 +237,21 @@ public class DatabaseThread extends Thread {
         } catch (SQLException e) {
             System.out.println("Error occurred while updating user budget: " + e.getMessage());
         }
+    }
 
+        public void createUserBudget(Budget newBudget) {
+        var query = "INSERT INTO budget ( budgetName, userID, budgetAmount, startDate, endDate ) VALUES ( ?, ?, ?, ?, ? );";
+        try (var connection = GetConnection.getConn();
+                PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, newBudget.getBudgetName());
+            statement.setInt(2, getCurrentUser().getId());
+            statement.setLong(3, 0);
+            statement.setString(4, newBudget.getStartDate());
+            statement.setString(5, newBudget.getEndDate());
+            statement.executeUpdate();
+            fetchUserBudget();
+        } catch (SQLException e) {
+            System.out.println("Error occurred while creating user budget: " + e.getMessage());
+        }
     }
 }

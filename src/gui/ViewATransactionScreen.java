@@ -3,8 +3,6 @@ package gui;
 import java.util.List;
 import java.util.ArrayList;
 
-import java.util.function.Supplier;
-
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -106,23 +104,22 @@ public class ViewATransactionScreen extends javax.swing.JFrame {
     }// </editor-fold>
 
     private void searchBttnActionPerformed(java.awt.event.ActionEvent evt) {
+        
+        DefaultTableModel tblModel = (DefaultTableModel) transactionTable.getModel();
         var input = searchField.getText();
         var transactions = databaseThread.getUserTransactions();
-        Supplier<List<Transaction>> searchedTransaction = () -> {
-            List<Transaction> searchVal = new ArrayList<>();
-            for (Transaction tx : transactions) {
-                if (tx.getCategory().getName().equals(input)) {
-                    searchVal.add(tx);
-                    break;
-                }
+        var searchedTransaction = searchField(transactions, input);
+        
+        if (searchedTransaction.isEmpty()) {
+            int i = tblModel.getRowCount();
+            while(i > 0) {
+                tblModel.removeRow(i - 1);
+                i--;
             }
-            return searchVal;
-        };
-        if (searchedTransaction.get() == null) {
-            JOptionPane.showMessageDialog(this, "No results Found", "Error", JOptionPane.ERROR_MESSAGE);
-        } else {
-            DefaultTableModel tblModel = (DefaultTableModel) transactionTable.getModel();
-            for (Transaction tx : searchedTransaction.get()) {
+            JOptionPane.showMessageDialog(ViewATransactionScreen.this, "No results Found", "Error", JOptionPane.ERROR_MESSAGE);
+        } 
+        if (!searchedTransaction.isEmpty()) {
+            for (Transaction tx : searchedTransaction) {
                 String[] data = { tx.getDate().toString(), String.valueOf(tx.getAmount()), tx.getCategory().getName() };
                 tblModel.addRow(data);
             }
@@ -133,36 +130,15 @@ public class ViewATransactionScreen extends javax.swing.JFrame {
         // TODO add your handling code here:
     }
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        /* Set the Nimbus look and feel */
-        // <editor-fold defaultstate="collapsed" desc=" Look and feel setting code
-        // (optional) ">
-        /*
-         * If Nimbus (introduced in Java SE 6) is not available, stay with the default
-         * look and feel.
-         * For details see
-         * http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
+    private List<Transaction> searchField(List<Transaction> transactions, String input) {
+        List<Transaction> searchVal = new ArrayList<>();
+        for (Transaction tx : transactions) {
+            if (tx.getCategory().getName().equals(input)) {
+                searchVal.add(tx);
+                break;
             }
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException
-                | javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ViewATransactionScreen.class.getName()).log(
-                    java.util.logging.Level.SEVERE,
-                    null, ex);
         }
-        // </editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new ViewATransactionScreen().setVisible(true));
+        return searchVal;
     }
 
     // Variables declaration - do not modify

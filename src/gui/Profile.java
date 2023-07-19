@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 
+import util.DatabaseThread;
 import util.User;
 
 public class Profile extends JFrame {
@@ -20,14 +21,14 @@ public class Profile extends JFrame {
     private JPanel contentPane;
     private ProfilePanel profilePanel;
 
-    public Profile(User currentUser) {
+    public Profile(DatabaseThread databaseThread) {
         setTitle("Personal Finance Tracker");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setSize(600, 500);
         setLocationRelativeTo(null);
 
         contentPane = new JPanel(new CardLayout());
-        profilePanel = new ProfilePanel(currentUser);
+        profilePanel = new ProfilePanel(databaseThread);
 
         contentPane.add(profilePanel, PROFILE_PAGE);
 
@@ -57,18 +58,6 @@ public class Profile extends JFrame {
         contentPane.repaint();
     }
 
-    public void showProfilePage() {
-        // TODO profilePage
-    }
-
-    public void showRegistrationPage() {
-        // TODO registration switch
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(Profile::new);
-    }
-
     private class ProfilePanel extends JPanel {
         private JTextField nameField;
         private JTextField emailField;
@@ -79,13 +68,14 @@ public class Profile extends JFrame {
         private JButton switchToRegistrationButton;
         private JButton clearButton;
         private transient User currentUser;
+        public void setCurrentUser(User currentUser) {
+            this.currentUser = currentUser;
+        }
+
+        private DatabaseThread databaseThread;
 
         public User getCurrentUser() {
             return currentUser;
-        }
-
-        public void setCurrentUser(User currentUser) {
-            this.currentUser = currentUser;
         }
 
         public ProfilePanel() {
@@ -133,7 +123,9 @@ public class Profile extends JFrame {
             clearButton.addActionListener(this::actionPerformed);
         }
 
-        public ProfilePanel(User currentUser) {
+        public ProfilePanel(DatabaseThread databaseThread) {
+            this.databaseThread = databaseThread;
+            this.currentUser = databaseThread.getCurrentUser();
             setLayout(new GridLayout(6, 2));
 
             JLabel nameLabel = new JLabel(NAME);
@@ -156,7 +148,6 @@ public class Profile extends JFrame {
             genderField.setEditable(false);
 
             // Update the fields with the user's information
-            this.setCurrentUser(currentUser);
             updateFields();
 
             add(nameLabel);
@@ -181,16 +172,16 @@ public class Profile extends JFrame {
 
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == switchToLoginButton) {
-                SwingUtilities.invokeLater(Login::new);
+                SwingUtilities.invokeLater(() -> new Login(new DatabaseThread()));
             }
             if (e.getSource() == switchToRegistrationButton) {
                 SwingUtilities.invokeLater(Registration::new);
             }
-            if (e.getSource() == clearButton) {
-                nameField.setText("");
-                emailField.setText("");
-                usernameField.setText("");
-                genderField.setText("");
+            if (e.getSource() == clearButton && (editProfileButton.getText().equals(EDIT_PROFILE))) {
+                    nameField.setText("");
+                    emailField.setText("");
+                    usernameField.setText("");
+                    genderField.setText("");
             }
             if (e.getSource() == editProfileButton) {
                 if (editProfileButton.getText().equals(EDIT_PROFILE)) {
@@ -212,24 +203,24 @@ public class Profile extends JFrame {
                     saveChanges();
                 }
             }
-
         }
 
         private void updateFields() {
-            nameField.setText(this.getCurrentUser().getUsername());
+            nameField.setText(this.getCurrentUser().getName());
             emailField.setText(this.getCurrentUser().getEmail());
             usernameField.setText(this.getCurrentUser().getUsername());
             genderField.setText(this.getCurrentUser().getGender());
         }
 
         private void saveChanges() {
-            String newName = nameField.getText();
-            String newEmail = emailField.getText();
-            String newUsername = usernameField.getText();
-            String newGender = genderField.getText();
+            this.currentUser.setName(nameField.getText());
+            this.currentUser.setEmail(emailField.getText());
+            this.currentUser.setUsername(usernameField.getText());
+            this.currentUser.setGender(genderField.getText());
 
             // Update the user's information in the database
-            currentUser.updateUser(newName, newEmail, newUsername, newGender);
+            currentUser.updateUser();
+            this.setCurrentUser(databaseThread.getCurrentUserInfo());
         }
     }
 

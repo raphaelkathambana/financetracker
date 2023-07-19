@@ -2,6 +2,7 @@ package gui;
 
 import javax.swing.*;
 
+import util.DatabaseThread;
 import util.User;
 
 import java.awt.*;
@@ -75,7 +76,7 @@ public class Registration extends JFrame {
             usernameField = new JTextField();
             passwordField = new JPasswordField();
             confirmPasswordField = new JPasswordField();
-            genderComboBox = new JComboBox<>(new String[] { "Male", "Female", "I Identify as" });
+            genderComboBox = new JComboBox<>(new String[] { "Male", "Female"});
             submitButton = new JButton(SUBMIT);
             clearButton = new JButton(CLEAR);
 
@@ -121,7 +122,7 @@ public class Registration extends JFrame {
                     User.addNewUser(usernameField.getText(), nameField.getText(), emailField.getText(),
                             String.valueOf(passwordField.getPassword()), getSelectedGender());
                     // If registration is successful, switch to the login panel
-                    SwingUtilities.invokeLater(Login::new);
+                    SwingUtilities.invokeLater(()-> new Login(new DatabaseThread()));
                 } else {
                     // Show error message
                     JOptionPane.showMessageDialog(this, "Invalid input", "Error", JOptionPane.ERROR_MESSAGE);
