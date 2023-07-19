@@ -10,6 +10,8 @@ import util.Report;
 import util.Transaction;
 import util.parentCategory;
 
+import alice.bye.Program;
+
 public class App {
     public static void main(String[] args) {
         System.out.println("Hello, World!");
@@ -57,6 +59,12 @@ public class App {
             System.out.println("Error loading db.properties from classpath." + e);
         }
         String exportUrl = mySql.getProperty("export");
-        report.exportReport(exportUrl);
+        // report.exportReport(exportUrl);
+
+        System.setProperty("org.alice.ide.rootDirectory", "./");
+        final Program story = new Program();
+        story.initializeInFrame(args);
+        story.setActiveScene(story.getMyScene());
+
     }
 }

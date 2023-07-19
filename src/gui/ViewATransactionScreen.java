@@ -47,8 +47,6 @@ public class ViewATransactionScreen extends javax.swing.JFrame {
         transactionTable = new javax.swing.JTable();
         viewTransactions = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
         searchField.addActionListener(this::searchFieldActionPerformed);
 
         searchBttn.setText("SEARCH");

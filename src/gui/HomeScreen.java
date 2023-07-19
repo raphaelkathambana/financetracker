@@ -7,9 +7,22 @@ package gui;
 
 import javax.swing.SwingUtilities;
 
+import com.toedter.calendar.JDateChooser;
+
 import util.DatabaseThread;
+import util.Report;
 import util.User;
 import java.awt.event.ActionEvent;
+import java.io.FileReader;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
+import java.util.Properties;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 /**
@@ -19,6 +32,25 @@ import javax.swing.JOptionPane;
 public class HomeScreen extends javax.swing.JFrame {
     User currentUser;
     DatabaseThread databaseThread;
+    LocalDate startDate;
+
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    LocalDate endDate;
+
+    public LocalDate getEndDate() {
+        return endDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+    }
 
     public HomeScreen() {
         initComponents();
@@ -114,39 +146,60 @@ public class HomeScreen extends javax.swing.JFrame {
                 jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addContainerGap()
-                                .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, 162,
+                                .addComponent(label1,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE,
+                                        162,
                                         javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED,
-                                        javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(label2, javax.swing.GroupLayout.PREFERRED_SIZE, 227,
+                                .addPreferredGap(
+                                        javax.swing.LayoutStyle.ComponentPlacement.RELATED,
+                                        javax.swing.GroupLayout.DEFAULT_SIZE,
+                                        Short.MAX_VALUE)
+                                .addComponent(label2,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE,
+                                        227,
                                         javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addContainerGap())
                         .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addGap(64, 64, 64)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(updateBudget, javax.swing.GroupLayout.PREFERRED_SIZE, 255,
+                                .addGroup(jPanel2Layout.createParallelGroup(
+                                        javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(updateBudget,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                255,
                                                 javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(makeBudget, javax.swing.GroupLayout.PREFERRED_SIZE, 255,
+                                        .addComponent(makeBudget,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                255,
                                                 javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE,
+                                        Short.MAX_VALUE)));
         jPanel2Layout.setVerticalGroup(
                 jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addGap(45, 45, 45)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, 54,
+                                .addGroup(jPanel2Layout.createParallelGroup(
+                                        javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(label1,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                54,
                                                 javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(label2, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                        .addComponent(label2,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE,
                                                 javax.swing.GroupLayout.DEFAULT_SIZE,
                                                 javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(98, 98, 98)
                                 .addGap(86, 86, 86)
-                                .addComponent(makeBudget, javax.swing.GroupLayout.PREFERRED_SIZE, 61,
+                                .addComponent(makeBudget,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE,
+                                        61,
                                         javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(70, 70, 70)
-                                .addComponent(updateBudget, javax.swing.GroupLayout.PREFERRED_SIZE, 56,
+                                .addComponent(updateBudget,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE,
+                                        56,
                                         javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE,
+                                        Short.MAX_VALUE)));
 
         signout.setBackground(new java.awt.Color(153, 0, 0));
         signout.setFont(new java.awt.Font(DIALOG, 3, 36)); // NOI18N
@@ -174,6 +227,7 @@ public class HomeScreen extends javax.swing.JFrame {
         viewReports.setFont(new java.awt.Font(DIALOG, 3, 24)); // NOI18N
         viewReports.setForeground(new java.awt.Color(153, 0, 0));
         viewReports.setLabel("View Reports");
+        viewReports.addActionListener(this::viewReportsActionPerformed);
 
         viewTransaction.setBackground(new java.awt.Color(255, 204, 204));
         viewTransaction.setFont(new java.awt.Font(DIALOG, 3, 24)); // NOI18N
@@ -214,55 +268,73 @@ public class HomeScreen extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
                 jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                        javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jPanel2,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE,
+                                        javax.swing.GroupLayout.DEFAULT_SIZE,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(jPanel1Layout.createParallelGroup(
+                                        javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(jPanel1Layout
+                                                .createSequentialGroup()
                                                 .addGap(13, 13, 13)
-                                                .addComponent(label3, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                        javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addComponent(label3,
+                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                        Short.MAX_VALUE))
+                                        .addGroup(jPanel1Layout
+                                                .createSequentialGroup()
                                                 .addGap(32, 32, 32)
                                                 .addGroup(jPanel1Layout
-                                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .createParallelGroup(
+                                                                javax.swing.GroupLayout.Alignment.LEADING)
                                                         .addGroup(jPanel1Layout
                                                                 .createParallelGroup(
                                                                         javax.swing.GroupLayout.Alignment.LEADING,
                                                                         false)
-                                                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                                                .addGroup(jPanel1Layout
+                                                                        .createSequentialGroup()
                                                                         .addComponent(editProfile,
                                                                                 javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                226, Short.MAX_VALUE)
+                                                                                226,
+                                                                                Short.MAX_VALUE)
                                                                         .addGap(42, 42, 42))
-                                                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                                                .addGroup(jPanel1Layout
+                                                                        .createSequentialGroup()
                                                                         .addComponent(viewTransaction,
                                                                                 javax.swing.GroupLayout.DEFAULT_SIZE,
                                                                                 javax.swing.GroupLayout.DEFAULT_SIZE,
                                                                                 Short.MAX_VALUE)
                                                                         .addGap(42, 42, 42)))
-                                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                                        .addGroup(jPanel1Layout
+                                                                .createSequentialGroup()
                                                                 .addComponent(transaction,
-                                                                        javax.swing.GroupLayout.PREFERRED_SIZE, 225,
+                                                                        javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                        225,
                                                                         javax.swing.GroupLayout.PREFERRED_SIZE)
                                                                 .addGap(42, 42, 42)))
                                                 .addGroup(jPanel1Layout
-                                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                                        .createParallelGroup(
+                                                                javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addGroup(jPanel1Layout
+                                                                .createSequentialGroup()
                                                                 .addComponent(contact,
-                                                                        javax.swing.GroupLayout.PREFERRED_SIZE, 240,
+                                                                        javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                        240,
                                                                         javax.swing.GroupLayout.PREFERRED_SIZE)
                                                                 .addPreferredGap(
                                                                         javax.swing.LayoutStyle.ComponentPlacement.RELATED,
                                                                         javax.swing.GroupLayout.DEFAULT_SIZE,
                                                                         100)
                                                                 .addComponent(signout,
-                                                                        javax.swing.GroupLayout.PREFERRED_SIZE, 196,
+                                                                        javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                        196,
                                                                         javax.swing.GroupLayout.PREFERRED_SIZE)
                                                                 .addContainerGap())
                                                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
                                                                 jPanel1Layout.createSequentialGroup()
-                                                                        .addGroup(jPanel1Layout.createParallelGroup(
-                                                                                javax.swing.GroupLayout.Alignment.TRAILING)
+                                                                        .addGroup(jPanel1Layout
+                                                                                .createParallelGroup(
+                                                                                        javax.swing.GroupLayout.Alignment.TRAILING)
                                                                                 .addGroup(
                                                                                         javax.swing.GroupLayout.Alignment.LEADING,
                                                                                         jPanel1Layout
@@ -282,41 +354,66 @@ public class HomeScreen extends javax.swing.JFrame {
                                                                                                         216,
                                                                                                         javax.swing.GroupLayout.PREFERRED_SIZE)))
                                                                         .addGap(50, 50, 50))))
-                                        .addGroup(jPanel1Layout.createSequentialGroup()
-                                                .addGap(273, 273, 273)))));
+                                        .addGroup(jPanel1Layout
+                                                .createSequentialGroup()
+                                                .addGap(273, 273,
+                                                        273)))));
         jPanel1Layout.setVerticalGroup(
                 jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE,
                                 javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout
+                                .createSequentialGroup()
                                 .addGap(51, 51, 51)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addGroup(jPanel1Layout.createSequentialGroup()
-                                                .addComponent(label3, javax.swing.GroupLayout.PREFERRED_SIZE, 70,
+                                .addGroup(jPanel1Layout.createParallelGroup(
+                                        javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addGroup(jPanel1Layout
+                                                .createSequentialGroup()
+                                                .addComponent(label3,
+                                                        javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                        70,
                                                         javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addGap(86, 86, 86)
                                                 .addGroup(jPanel1Layout
-                                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                        .createParallelGroup(
+                                                                javax.swing.GroupLayout.Alignment.TRAILING)
                                                         .addComponent(viewTransaction,
-                                                                javax.swing.GroupLayout.PREFERRED_SIZE, 70,
+                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                70,
                                                                 javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                        .addComponent(viewReports, javax.swing.GroupLayout.PREFERRED_SIZE, 71,
+                                        .addComponent(viewReports,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                71,
                                                 javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(62, 62, 62)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(generateReport, javax.swing.GroupLayout.PREFERRED_SIZE, 68,
+                                .addGroup(jPanel1Layout.createParallelGroup(
+                                        javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(generateReport,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                68,
                                                 javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(transaction, javax.swing.GroupLayout.PREFERRED_SIZE, 61,
+                                        .addComponent(transaction,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                61,
                                                 javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 67,
+                                .addPreferredGap(
+                                        javax.swing.LayoutStyle.ComponentPlacement.RELATED,
+                                        67,
                                         Short.MAX_VALUE)
                                 .addGap(104, 104, 104)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(signout, javax.swing.GroupLayout.PREFERRED_SIZE, 66,
+                                .addGroup(jPanel1Layout.createParallelGroup(
+                                        javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(signout,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                66,
                                                 javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(editProfile, javax.swing.GroupLayout.PREFERRED_SIZE, 65,
+                                        .addComponent(editProfile,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                65,
                                                 javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(contact, javax.swing.GroupLayout.PREFERRED_SIZE, 69,
+                                        .addComponent(contact,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                69,
                                                 javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(16, 16, 16)));
 
@@ -346,22 +443,21 @@ public class HomeScreen extends javax.swing.JFrame {
      */
 
     private void contactActionPerformed(ActionEvent e) {
-        SwingUtilities.invokeLater(() -> new Support(databaseThread));
+        SwingUtilities.invokeLater(() -> new Support(this.databaseThread));
         this.dispose();
     }
 
     private void editProfileActionPerformed(ActionEvent e) {
-        SwingUtilities.invokeLater(() -> new Profile(databaseThread));
+        SwingUtilities.invokeLater(() -> new Profile(this.databaseThread));
         this.dispose();
     }
 
     private void viewTransactionActionPerformed(ActionEvent e) {
         SwingUtilities.invokeLater(() -> new ViewATransactionScreen(this.databaseThread));
-        this.dispose();
     }
 
     private void generateReportActionPerformed(ActionEvent e) {
-        Object[] options = { "expenses", "income", "exit" };
+        Object[] options = { "Expenses", "Income" };
 
         // Show the option dialog with a question icon
         int selectedOption = JOptionPane.showOptionDialog(null,
@@ -378,30 +474,126 @@ public class HomeScreen extends javax.swing.JFrame {
         switch (selectedOption) {
             case 0:
                 System.out.println("Generate expense report");
+                getDate("Select Your Dates", 0);
                 break;
             case 1:
                 System.out.println("Generate income report");
-                break;
-            case 2:
-                System.out.println("leaving");
+                getDate("Pick Your Dates", 1);
                 break;
             default:
-                System.out.println("Invalid selection");
+                break;
         }
+    }
+
+    private void getDate(String title, int option) {
+        JFrame showCal = new JFrame();
+        showCal.setTitle(title);
+        showCal.setSize(400, 300);
+        showCal.setLocationRelativeTo(null);
+        showCal.setLayout(null);
+
+        // Create a JDateChooser
+        JDateChooser startDateChooser = new JDateChooser();
+        JDateChooser endDateChooser = new JDateChooser();
+
+        // Add the date selection listener
+        startDateChooser.getDateEditor().addPropertyChangeListener(e -> {
+            if ("date".equals(e.getPropertyName())) {
+                // Date has been selected
+                Date selectedDate = startDateChooser.getDate();
+                if (selectedDate != null) {
+                    // Display a JOptionPane with the selected date
+                    String message = "Selected Date: " + selectedDate;
+
+                    JOptionPane.showMessageDialog(showCal, message, "Date Selected",
+                            JOptionPane.INFORMATION_MESSAGE);
+
+                    // Close the JFrame
+                    setStartDate(selectedDate);
+                }
+            }
+        });
+        // Add the date selection listener
+        endDateChooser.getDateEditor().addPropertyChangeListener(e -> {
+            if ("date".equals(e.getPropertyName())) {
+                // Date has been selected
+                Date selectedDate = endDateChooser.getDate();
+                if (selectedDate != null) {
+                    // Display a JOptionPane with the selected date
+                    String message = "Selected Date: " + selectedDate;
+
+                    JOptionPane.showMessageDialog(showCal, message, "Date Selected",
+                            JOptionPane.INFORMATION_MESSAGE);
+
+                    // Close the JFrame
+                    setEndDate(selectedDate);
+                }
+            }
+        });
+        JButton btnClose = new JButton("Close");
+        btnClose.addActionListener(e -> {
+            Properties mySql = new Properties();
+            try (FileReader in = new FileReader("db.properties")) {
+                mySql.load(in);
+            } catch (IOException ex) {
+                System.out.println("Error loading db.properties from classpath." + ex);
+            }
+            String exportUrl = mySql.getProperty("export");
+            switch (option) {
+                case 0:
+                    Report expense = new Report("Expense Summary", this.getStartDate().toString(),
+                            this.getEndDate().toString(),
+                            databaseThread.getUserTransactions());
+                    expense.generateReport();
+                    expense.exportReport(exportUrl);
+                    break;
+                case 1:
+                    Report income = new Report("Income Summary", this.getStartDate().toString(),
+                            this.getEndDate().toString(),
+                            databaseThread.getUserTransactions());
+                    income.generateReport();
+                    income.exportReport(exportUrl);
+                    break;
+                default:
+                    break;
+            }
+            JOptionPane.showMessageDialog(showCal, "Report Successfully Generated", "Success",
+                    JOptionPane.INFORMATION_MESSAGE);
+            showCal.dispose();
+        });
+
+        JLabel startDateLabel = new JLabel("Start Date");
+        JLabel endDateLabel = new JLabel("End Date");
+
+        startDateLabel.setBounds(5, 5, 100, 30);
+        startDateChooser.setBounds(5, 40, 350, 50);
+        endDateLabel.setBounds(5, 95, 100, 30);
+        endDateChooser.setBounds(5, 125, 350, 50);
+        btnClose.setBounds(100, 200, 120, 30);
+
+        // Add the dateChooser to the frame
+        showCal.add(startDateChooser);
+        showCal.add(startDateLabel);
+        showCal.add(endDateChooser);
+        showCal.add(endDateLabel);
+        showCal.add(btnClose);
+
+        showCal.setVisible(true);
     }
 
     private void addTransactionActionPerformed(ActionEvent e) {
         SwingUtilities.invokeLater(() -> new InputTransaction(this.databaseThread));
-        this.dispose();
     }
 
     private void updateBudgetActionPerformed(ActionEvent e) {
         SwingUtilities.invokeLater(() -> new BudgetScreen(this.databaseThread));
-        this.dispose();
     }
 
     private void makeBudgetActionPerformed(ActionEvent e) {
         SwingUtilities.invokeLater(() -> new MakeBudgetScreen(this.databaseThread));
-        this.dispose();
+    }
+
+    private void viewReportsActionPerformed(ActionEvent e) {
+        SwingUtilities.invokeLater(ViewReport::new);
     }
 }

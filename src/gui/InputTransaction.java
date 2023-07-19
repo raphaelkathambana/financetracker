@@ -74,8 +74,6 @@ public class InputTransaction extends javax.swing.JFrame {
 
         jMenuItem1.setText("jMenuItem1");
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
         jLabel1.setText("CATEGORY:");
         jLabel2.setText("AMOUNT:");
         jLabel3.setText("DATE:");

@@ -1,0 +1,5 @@
+Report Type: Expense Summary
+Start Date: 2023-07-01
+End Date: 2023-07-31
+Expense Summary:
+Housing: 1000.0

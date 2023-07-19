@@ -47,7 +47,7 @@ public class Report {
     }
 
     public void exportReport(String filePath) {
-        String fileName = filePath + "/" + reportType.replace(" ", "_") + ".pdf";
+        String fileName = filePath + "/" + reportType.replace(" ", "_") + ".txt";
         try (PrintWriter writer = new PrintWriter(new FileOutputStream(new File(fileName)))) {
             // Write the report content to the file
             writer.println("Report Type: " + reportType);

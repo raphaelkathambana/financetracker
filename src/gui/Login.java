@@ -36,6 +36,7 @@ public class Login extends JFrame {
         add(contentPane);
         setVisible(true);
     }
+
     public Login(DatabaseThread databaseThread) {
         setTitle(LOGIN_TEXT);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -242,7 +243,7 @@ public class Login extends JFrame {
             // Perform authentication logic here
             if (authenticateUser(username, password)) {
                 JOptionPane.showMessageDialog(LoginPanel.this, "Welcome " + username, "Login Success",
-                JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.INFORMATION_MESSAGE);
                 // Start the DatabaseThread
                 this.databaseThread.setLoggedIn(true);
                 this.databaseThread.setCurrentUser(currentUser);

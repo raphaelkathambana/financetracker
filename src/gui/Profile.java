@@ -23,7 +23,6 @@ public class Profile extends JFrame {
 
     public Profile(DatabaseThread databaseThread) {
         setTitle("Personal Finance Tracker");
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setSize(600, 500);
         setLocationRelativeTo(null);
 
@@ -38,7 +37,6 @@ public class Profile extends JFrame {
 
     public Profile() {
         setTitle("Personal Finance Tracker");
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setSize(600, 500);
         setLocationRelativeTo(null);
 

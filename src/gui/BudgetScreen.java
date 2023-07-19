@@ -84,8 +84,6 @@ public class BudgetScreen extends javax.swing.JFrame {
         jLabel1.setToolTipText("");
         jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
 
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
